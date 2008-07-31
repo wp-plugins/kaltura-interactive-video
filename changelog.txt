@@ -1,0 +1,15 @@
+Version 0.95
+-------------
+* Changed image placeholder for comments
+* Fixed thumbnail not being updated in edit video screen
+* New icon for interactive video
+* Added interactive video library
+
+Version 0.9
+-------------
+* Added support for WP 2.6  
+* Added support for new Kaltura URL's
+* Kaltura modules:
+	KDP (Dynamic Player) v1.0.5
+	KCW (Contribution Wizard) v1.5.4
+	KSE (Simple Editor) v2.0.6
