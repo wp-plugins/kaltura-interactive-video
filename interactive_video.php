@@ -3,7 +3,7 @@
 Plugin Name: Interactive Video
 Plugin URI: http://kaltura.org/community/viewtopic.php?f=4&t=3
 Description: Add interactive video capabilities to your blog! Enhance your WordPress blog with a full video experience. Enable playing and editing of video remixes.
-Version: 0.9.5RC2
+Version: 0.9.5
 Author: Kaltura
 Author URI: http://corp.kaltura.com
 */
@@ -57,7 +57,7 @@ if (KalturaHelpers::compareWPVersion("2.6", "<")) {
 	add_action("admin_head_kaltura_tab_browse_content", "media_admin_css");
 }
 
-register_deactivation_hook('interactive_video/interactive_video.php', kaltura_deactivate);
+register_deactivation_hook('kaltura-interactive-video/kaltura-interactive-video.php', kaltura_deactivate);
 
 
 // tiny mce

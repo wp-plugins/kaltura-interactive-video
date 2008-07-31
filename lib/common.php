@@ -39,7 +39,7 @@ function kalturaGetSessionUser() {
 }
 
 function kalturaGetPluginUrl() {
-	$plugin_url = get_settings('siteurl') . '/wp-content/plugins/interactive_video';   
+	$plugin_url = get_settings('siteurl') . '/wp-content/plugins/kaltura-interactive-video';   
 	return $plugin_url;
 }
 
