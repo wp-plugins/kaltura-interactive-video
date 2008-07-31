@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Interactive Video
-Plugin URI: http://corp.kaltura.com
-Description: Easily add full video capabilities to your blog. This plugin allows you to add an interactive video player that includes an upload/import tool and a web-based video mixer (editor).
-Version: 0.95RC2
+Plugin URI: http://kaltura.org/community/viewtopic.php?f=4&t=3
+Description: Add interactive video capabilities to your blog! Enhance your WordPress blog with a full video experience. Enable playing and editing of video remixes.
+Version: 0.9.5RC2
 Author: Kaltura
 Author URI: http://corp.kaltura.com
 */
