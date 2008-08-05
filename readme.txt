@@ -24,6 +24,7 @@ Highlights:
 * Complete administrative capabilities – you decide who can add and edit videos
 * Integration to the post wyswyg editor.
 * Easy installation that takes just 4 steps and a few minutes.
+* Option to integrate in-stream video ads.
 
 Examples and pictures are on the plugin forum:
 http://community.kaltura.org/viewforum.php?f=4
