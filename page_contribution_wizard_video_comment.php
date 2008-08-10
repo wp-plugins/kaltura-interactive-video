@@ -63,7 +63,7 @@
 		{
 			$kshowId = "-2";
 			$ks = $kalturaClient->getKs();
-			$viewData["swfUrl"]    		= KalturaHelpers::getContributionWizardUrl(KalturaWPSettings::KCW_UICONF_COMMENTS);
+			$viewData["swfUrl"]    		= KalturaHelpers::getContributionWizardUrl(KALTURA_KCW_UICONF_COMMENTS);
 			$viewData["flashVars"] 		= KalturaHelpers::getContributionWizardFlashVars($ks, $kshowId);
 			$viewData["postId"] = $_GET["postid"];
 		}

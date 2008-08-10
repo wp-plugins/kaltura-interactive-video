@@ -91,7 +91,7 @@
 					$kalturaClient = getKalturaClient();
 					$widget = new KalturaWidget();
 					$widget->kshowId = $kshowId;
-					$widget->uiConfId = KalturaWPSettings::UICONF_ID;
+					$widget->uiConfId = KALTURA_UICONF_ID;
 					$result = $kalturaClient->addwidget($sessionUser, $widget);
 					$widgetId = $result["result"]["widget"]["id"];
 					$viewData["playerSize"] = $_POST["playerSize"];

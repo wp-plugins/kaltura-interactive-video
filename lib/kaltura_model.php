@@ -1,7 +1,7 @@
 <?php
 class KalturaModel 
 {
-	static function getKshow($kalturaClient, $kshowId) 
+	function getKshow($kalturaClient, $kshowId) 
 	{
 		$sessionUser = kalturaGetSessionUser();
 		$ks = $kalturaClient->getKs();
@@ -9,46 +9,46 @@ class KalturaModel
 		return @$result["result"]["kshow"];
 	}
 	
-	static function updateKshow($kalturaClient, $kshowId, $kshowUpdate)
+	function updateKshow($kalturaClient, $kshowId, $kshowUpdate)
 	{
 		$sessionUser = kalturaGetSessionUser();
 		$kalturaClient->updateKShow($sessionUser, $kshowId, $kshowUpdate);
 	}
 	
-	static function getKshows($kalturaAdminClient, $pageSize, $page)
+	function getKshows($kalturaAdminClient, $pageSize, $page)
 	{
 		$sessionUser = kalturaGetSessionUser();
 					
 		$filter = new KalturaKShowFilter();
-		$filter->orderBy = KalturaKShowFilter::ORDER_BY_CREATED_AT_DESC;
+		$filter->orderBy = KalturaKShowFilter_ORDER_BY_CREATED_AT_DESC;
 		$result = $kalturaAdminClient->listKShows($sessionUser, $filter, true, $pageSize, $page);
 		return $result["result"];
 	}
 	
-	static function addKshow($kalturaClient, $kshow)
+	function addKshow($kalturaClient, $kshow)
 	{
 		$sessionUser = kalturaGetSessionUser();
 		$res = $kalturaClient->addKShow($sessionUser, $kshow);
 		return @$res["result"]["kshow"]["id"];
 	}
 
-	static function getPartner($kalturaClient, $email, $password, $partnerId)
+	function getPartner($kalturaClient, $email, $password, $partnerId)
 	{
 		$sessionUser = kalturaGetSessionUser();
 		$res = $kalturaClient->getPartner($sessionUser, $email, $password, $partnerId);
 		return @$res;
 	}
 
-	static function getLastKshow($kalturaClient)
+	function getLastKshow($kalturaClient)
 	{
 		$sessionUser = kalturaGetSessionUser();
 		$filter = new KalturaKShowFilter();
-		$filter->orderBy = KalturaKShowFilter::ORDER_BY_CREATED_AT_DESC;
+		$filter->orderBy = KalturaKShowFilter_ORDER_BY_CREATED_AT_DESC;
 		$res = $kalturaClient->listMyKShows($sessionUser, $filter, "true", 1, 1);
 		return @$res["result"]["kshows"][0];
 	}
 	
-	static function deleteKShow($kalturaAdminClient, $kshowId)
+	function deleteKShow($kalturaAdminClient, $kshowId)
 	{
 		$sessionUser = kalturaGetSessionUser();
 		return $kalturaAdminClient->deleteKShow($sessionUser, $kshowId);

@@ -1,7 +1,7 @@
 <?php
-class KalturaWordpressLogger implements IKalturaLogger {
+class KalturaWordpressLogger {
 	function log($str) {
-		//print ($str);
+		//print ($str . "<br />\n");
 	}
 }
 
@@ -15,7 +15,7 @@ function kalturaGetServiceConfiguration() {
 }
 
 function kalturaGetServerUrl() {
-	$url = KalturaWPSettings::SERVER_URL;
+	$url = KALTURA_SERVER_URL;
 
 	// remove the last slash from the url
 	if (substr($url, strlen($url) - 1, 1) == '/')
@@ -29,7 +29,7 @@ function kalturaGetSessionUser() {
 	$kaltura_user = new KalturaSessionUser();
 	
 	if (!$user_ID) {
-		$kaltura_user->userId = KalturaWPSettings::ANONYMOUS_USER_ID; 
+		$kaltura_user->userId = KALTURA_ANONYMOUS_USER_ID; 
 		return $kaltura_user;
 	}
 	

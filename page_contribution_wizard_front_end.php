@@ -25,7 +25,7 @@
 	
 	$ks = $kalturaClient->getKs();
 	
-	$viewData["swfUrl"]    		= KalturaHelpers::getContributionWizardUrl(KalturaWPSettings::KCW_UICONF);
+	$viewData["swfUrl"]    		= KalturaHelpers::getContributionWizardUrl(KALTURA_KCW_UICONF);
 	$viewData["flashVars"] 		= KalturaHelpers::getContributionWizardFlashVars($ks, $kshowId);
 ?>
 <html>

@@ -1,7 +1,7 @@
 <?php
 class KalturaHelpers
 {
-	static function getContributionWizardFlashVars($ks, $kshowId)
+	function getContributionWizardFlashVars($ks, $kshowId)
 	{
 		$sessionUser = kalturaGetSessionUser();
 		$config = kalturaGetServiceConfiguration();
@@ -11,7 +11,7 @@ class KalturaHelpers
 		$flashVars["userId"] = $sessionUser->userId;
 		$flashVars["sessionId"] = $ks;
 	
-		if ($sessionUserId == KalturaWPSettings::ANONYMOUS_USER_ID) {
+		if ($sessionUserId == KALTURA_ANONYMOUS_USER_ID) {
 			 $flashVars["isAnonymous"] = true;
 		}
 			
@@ -25,7 +25,7 @@ class KalturaHelpers
 		return $flashVars;
 	}
 	
-	static function getSimpleEditorFlashVars($ks, $kshowId)
+	function getSimpleEditorFlashVars($ks, $kshowId)
 	{
 		$config = kalturaGetServiceConfiguration();
 		$sessionUser = kalturaGetSessionUser();
@@ -44,7 +44,7 @@ class KalturaHelpers
 		return $flashVars;
 	}
 	
-	static function getKalturaPlayerFlashVars($ks, $kshowId = -1, $entryId = -1)
+	function getKalturaPlayerFlashVars($ks, $kshowId = -1, $entryId = -1)
 	{
 		$config = kalturaGetServiceConfiguration();
 		$sessionUser = kalturaGetSessionUser();
@@ -61,14 +61,14 @@ class KalturaHelpers
 		return $flashVars;
 	}
 	
-	static function getTinyPlayerFlashVars($ks, $kshowId) {
+	function getTinyPlayerFlashVars($ks, $kshowId) {
 		$sessionUser = kalturaGetSessionUser();
-		$flashVars = self::getKalturaPlayerFlashVars($ks, $kshowId, -1);
+		$flashVars = KalturaHelpers::getKalturaPlayerFlashVars($ks, $kshowId, -1);
 		$flashVars["layoutId"] = "tinyPlayer";
 		return $flashVars;
 	}
 	
-	static function flashVarsToString($flashVars)
+	function flashVarsToString($flashVars)
 	{
 		$flashVarsStr = "";
 		foreach($flashVars as $key => $value)
@@ -78,35 +78,40 @@ class KalturaHelpers
 		return substr($flashVarsStr, 0, strlen($flashVarsStr) - 1);
 	}
 	
-	static function getSwfUrlForBaseWidget() 
+	function getSwfUrlForBaseWidget() 
 	{
-		return kalturaGetServerUrl() . "/index.php/kwidget/wid/" . KalturaWPSettings::BASE_WIDGET_ID;
+		return kalturaGetServerUrl() . "/index.php/kwidget/wid/" . KALTURA_BASE_WIDGET_ID;
 	}
 	
-	static function getSwfUrlForWidget($widgetId)
+	function getSwfUrlForWidget($widgetId)
 	{
 		return kalturaGetServerUrl() . "/index.php/kwidget/wid/" . $widgetId;
 	}
 	
-	static function getContributionWizardUrl($uiConfId)
+	function getContributionWizardUrl($uiConfId)
 	{
 		return kalturaGetServerUrl() . "/kse/ui_conf_id/" . $uiConfId;
 	}
 	
-	static function getSimpleEditorUrl($uiConfId)
+	function getSimpleEditorUrl($uiConfId)
 	{
 		return kalturaGetServerUrl() . "/kcw/ui_conf_id/" . $uiConfId;
 	}
 
-	static function userCanEdit() {
+	function userCanEdit() {
 		global $current_user;
-		$roles = array_fill_keys($current_user->roles, 1);
+
+		$roles = array();
+		foreach($current_user->roles as $key => $val)
+			$roles[$val] = 1;
+			 
 		$permissionsEdit = @get_option('kaltura_permissions_edit');
+		
+		// note - there are no breaks in the switch (code should jump to next case)
 		switch($permissionsEdit)
 		{
 			case "0":
 				return true;
-				break;
 			case "1":
 				if (@$roles["subscriber"])
 					return true;
@@ -121,13 +126,19 @@ class KalturaHelpers
 				if (@$roles["administrator"])
 					return true;
 		}
+		return false;
 	}
 
-	static function userCanAdd() {
+	function userCanAdd() {
 		global $current_user;
-		$roles = array_fill_keys($current_user->roles, 1);
+		
+		$roles = array();
+		foreach($current_user->roles as $key => $val)
+			$roles[$val] = 1;
+			
 		$permissionsAdd = @get_option('kaltura_permissions_add');
 	
+		// note - there are no breaks in the switch (code should jump to next case)
 		switch($permissionsAdd)
 		{
 			case "0":
@@ -149,17 +160,17 @@ class KalturaHelpers
 		return false;
 	}
 
-	static function anonymousCommentsAllowed()
+	function anonymousCommentsAllowed()
 	{
 		return @get_option("allow_anonymous_comments") == true ? true : false;
 	}
 	
-	static function videoCommentsEnabled()
+	function videoCommentsEnabled()
 	{
 		return @get_option("enable_video_comments") == true ? true : false;
 	}
 	
-	static function getThumbnailUrl($widgetId = null, $entryId = null, $width = 240, $height= 180, $version = 100000)
+	function getThumbnailUrl($widgetId = null, $entryId = null, $width = 240, $height= 180, $version = 100000)
 	{
 		$config = kalturaGetServiceConfiguration();
 		$url = kalturaGetServerUrl();
@@ -178,21 +189,21 @@ class KalturaHelpers
 		return $url;
 	}
 	
-	static function getCommentPlaceholderThumbnailUrl($widgetId = null, $entryId = null, $width = 240, $height= 180, $version = 100000)
+	function getCommentPlaceholderThumbnailUrl($widgetId = null, $entryId = null, $width = 240, $height= 180, $version = 100000)
 	{
 		$url = KalturaHelpers::getThumbnailUrl($widgetId, $entryId, $width, $height, $version);
 		$url .= "/crop_provider/wordpress_comment_placeholder";
 		return $url;
 	}
 
-	static function compareWPVersion($compareVersion, $operator)
+	function compareWPVersion($compareVersion, $operator)
 	{
 		global $wp_version;
 		
 		return version_compare($wp_version, $compareVersion, $operator);
 	}
 	
-	static function addWPVersionJS()
+	function addWPVersionJS()
 	{
 		global $wp_version;
 		echo("<script type='text/javascript'>");

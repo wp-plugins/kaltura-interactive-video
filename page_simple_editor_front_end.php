@@ -25,7 +25,7 @@
 	
 	$ks = $kalturaClient->getKs();
 	
-	$viewData["swfUrl"] 	= KalturaHelpers::getSimpleEditorUrl(KalturaWPSettings::KSE_UICONF);
+	$viewData["swfUrl"] 	= KalturaHelpers::getSimpleEditorUrl(KALTURA_KSE_UICONF);
 	$viewData["flashVars"] 	= KalturaHelpers::getSimpleEditorFlashVars($ks, $kshowId);
 ?>
 
