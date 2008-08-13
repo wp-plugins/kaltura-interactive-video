@@ -53,7 +53,7 @@ class KalturaClientBase
 		$this->config = $config;
 		
 		$logger = $this->config->getLogger();
-		if (method_exists($logger, "log"))
+		if ($logger)
 		{
 			$this->shouldLog = true;	
 		}
@@ -83,6 +83,38 @@ class KalturaClientBase
 		return $query; 
 	}
 		
+	function do_post_request($url, $data, $optional_headers = null)
+	{
+		$start = strpos($url,'//')+2;
+		$end = strpos($url,'/',$start);
+		$host = substr($url, $start, $end-$start);
+		$domain = substr($url,$end);
+		$fp = fsockopen($host, 80);
+		if(!$fp) return null;
+		fputs ($fp,"POST $domain HTTP/1.0\n");
+		fputs ($fp,"Host: $host\n");
+		if ($optional_headers) {
+			fputs($fp, $optional_headers);
+		}
+		fputs ($fp,"Content-type: application/x-www-form-urlencoded\n");
+		fputs ($fp,"Content-length: ".strlen($data)."\n\n");
+		fputs ($fp,"$data\n\n");
+		
+		$response = "";
+		while(!feof($fp)) {
+			$response .= fread($fp, 32768);
+		}
+	
+		$pos = strpos($response, "\r\n\r\n");
+		if ($pos)
+			$response = substr($response, $pos + 4);
+		else
+			$response = "";
+			
+		fclose ($fp);
+		return $response;
+	}
+	
 	function hit($method, $session_user, $params)
 	{
 		$start_time = microtime(true);
@@ -124,26 +156,8 @@ class KalturaClientBase
 			$this->log("not using curl");
 			$curl_error = "";
 			$params_string = $this->http_parse_query($params);
-			$http_data = array(
-					'http' => array(
-						'method' => 'POST',
-						'header' => 'Content-type: application/x-www-form-urlencoded'."\r\n".
-                                	'User-Agent: Kaltura PHP5 Client (API version '.KALTURA_API_VERSION.'; PHP '.phpversion().')'."\r\n".
-                                	'Content-length: ' . strlen($params_string),
-                    	'content' => $params_string
-				)
-			);
-			
-			$stream = stream_context_create($http_data);
-			$socket = fopen($url, 'r', false, $stream);
 
-			if ($socket) 
-			{
-				while (!feof($socket))
-					$http_result .= fgets($socket, 4096);
-
-				fclose($socket);
-      		}
+			$http_result = $this->do_post_request($url, $params_string);
 		}
 		
 		if ($curl_error)
@@ -157,14 +171,15 @@ class KalturaClientBase
 			if ($this->config->format == KALTURA_SERVICE_FORMAT_PHP)
 			{
 				$result = @unserialize($http_result);
-
+				
 				if (!$result) {
 					$result["result"] = null;
 					
 					$result["error"] = array(array("code" => "SERIALIZE_ERROR", "desc"=>"failed to serialize server result"));
 				}
-				$dump = print_r($result, true);
-				$this->log("result (object dump): " . $dump);
+				
+				//$dump = print_r($result, true);
+				//$this->log("result (object dump): " . $dump);
 			}
 			else
 			{

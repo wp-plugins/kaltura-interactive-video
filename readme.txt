@@ -35,7 +35,7 @@ http://community.kaltura.org/viewforum.php?f=4
 If you are installing this plugin for the first time:
 
 1. Download and extract the plugin zip file to your local machine
-2. Paste the 'interactive_video' directory under the '/wp-content/plugins/' directory
+2. Paste the 'kaltura-interactive-video' directory under the '/wp-content/plugins/' directory
 3. Activate the plugin through the 'Plugins' menu in the WordPress admin application
 4. Go to Settings > Interactive Video to setup the Interactive Video plugin
 
