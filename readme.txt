@@ -4,7 +4,7 @@ Donate link: http://community.kaltura.org/
 Tags: video, video comments, player, editor, rich-media, ria, interactive, collaboration, remix, mixing, mix, media, audio
 Requires at least: 2.5
 Tested up to: 2.6
-Stable tag: 0.9.5
+Stable tag: 1.0
 
 Easily add full interactive video capabilities to your blog.
 
