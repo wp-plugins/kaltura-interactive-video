@@ -1,4 +1,10 @@
-Version 0.95
+Version 1.0
+-------------
+* Added PHP4 support
+* Changed interactive video comments to be enabled by default
+
+
+Version 0.9.5
 -------------
 * Changed image placeholder for comments
 * Fixed thumbnail not being updated in edit video screen
