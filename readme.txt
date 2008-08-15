@@ -10,12 +10,12 @@ Easily add full interactive video capabilities to your blog.
 
 == Description ==
 
-Add interactive video capabilities to your blog! Enhance your WordPress blog with both basic and advanced video capabilities. Upload, record, import videos directly to your post, edit and remix video content, enable video responses, manage and track your video content and much more…
+Add interactive video capabilities to your blog! Enhance your WordPress blog with both basic and advanced video capabilities. Upload, record, import videos directly to your post, edit and remix video content, enable video responses, manage and track your video content and much more...
 
 Highlights:
 
 * Upload, record and import videos directly to your blog post;
-* Edit and remix videos using Kaltura’s online full-featured video editor;
+* Edit and remix videos using Kaltura's online full-featured video editor;
 * Easily import video and other forms of rich-media from other sites and social networks, and; 
 * Allow readers and subscribers to add video and audio comments, and to participate in collaborative videos;
 * Manage and track interactive videos through the management console;
