@@ -106,7 +106,7 @@ Kaltura = {
 	},
 	
 	getTopWindow: function () {
-		return window.top ? window.top : window.parent; 
+		return (window.opener) ? window.opener : (window.parent) ? window.parent : window.top; 
 	},
 	
 	hackSimpleEditorModal: function () {

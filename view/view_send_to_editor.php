@@ -2,14 +2,14 @@
 <script type="text/javascript">
 	var size = "<?php echo $viewData["playerSize"]; ?>";
 	var html = '[kaltura-widget wid="<?php echo $viewData["widgetId"]; ?>" size="'+size+'" /]';
-	window.top.tinyMCE.execCommand('mceInsertRawHTML', false, html);
-	//window.top.tinyMCE.execCommand("mceCleanup");
+	var topWindow = Kaltura.getTopWindow();
+	topWindow.tinyMCE.execCommand('mceInsertRawHTML', false, html);
 	
-	setTimeout('window.top.tb_remove()', 0);
+	setTimeout('topWindow.tb_remove()', 0);
 </script>
 <?php else: ?>
 <?php
-	$flashVarsStr = $flashVarsStr = KalturaHelpers::flashVarsToString($viewData["flashVars"]);
+	$flashVarsStr = KalturaHelpers::flashVarsToString($viewData["flashVars"]);
 ?>
 <div class="kalturaTab">
 	<form method="post" class="kalturaForm">
