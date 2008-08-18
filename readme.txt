@@ -1,7 +1,7 @@
 === Interactive Video Plugin ===
 Contributors: Kaltura
 Donate link: http://community.kaltura.org/
-Tags: video, video comments, player, editor, rich-media, ria, interactive, collaboration, remix, mixing, mix, media, audio, video blog, video responses, video editor, vlog, podcast, kaltura, comments
+Tags: video,video comments,player,editor,rich-media,ria,interactive,collaboration,remix,mixing,mix,media,audio,video blog,video responses,video editor,vlog,podcast,kaltura,comments,Post,Posts,Images,Admin,Plugin,photo,picture,richmedia cms,media library,media,edit,participate,
 Requires at least: 2.5
 Tested up to: 2.6
 Stable tag: 1.0
