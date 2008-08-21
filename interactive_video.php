@@ -256,7 +256,7 @@ function _kaltura_replace_tags($content, $isComment) {
 						<div id="' . $thumbnailDivId . '" style="width:'.$width.'px;height:'.$height.'px;" class="kalturaHand" onclick="Kaltura.activatePlayer(\''.$thumbnailDivId.'\',\''.$divId.'\');">
 							<img src="' . $thumbnailPlaceHolderUrl . '" style="" />
 						</div>
-						<div id="' . $divId . '" style="text-align:' . $embedOptions["align"] . '; height: '.$height.'px""><a href="http://corp.kaltura.com">open source video management - player and editor</a></div>
+						<div id="' . $divId . '" style="height: '.$height.'px""><a href="http://corp.kaltura.com">open source video management - player and editor</a></div>
 						<script type="text/javascript">
 							jQuery("#'.$divId.'").hide();
 							var kaltura_swf = new SWFObject("' . $embedOptions["swfUrl"] . '", "' . $playerId . '", "' . $width . '", "' . $height . '", "9", "#000000");
