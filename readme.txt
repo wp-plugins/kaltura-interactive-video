@@ -16,7 +16,7 @@ Highlights:
 
 * Upload, record from webcam and import all rich-media directly to your blog post;
 * Edit and remix videos using Kaltura's online full-featured video editor;
-* Easily import all rich media (video, audio, pictures...) from other sites and social networks, such as YouTube, MySpace, Flickr, Facebook, CCMixter, Jamendo, New York Public Library etc. and;
+* Easily import all rich media (video, audio, pictures...) from other sites and social networks, such as YouTube, MySpace, Flickr, CCMixter, Jamendo, New York Public Library etc. and;
 * Allow readers and subscribers to add video and audio comments, and to participate in collaborative videos;
 * Manage and track interactive videos through the management console;
 * Complete administrative capabilities. You decide who can add and edit videos;
