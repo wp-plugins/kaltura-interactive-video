@@ -1,22 +1,85 @@
 <?php if ($viewData["widgetId"]): ?>
 <script type="text/javascript">
-	var size = "<?php echo $viewData["playerSize"]; ?>";
-	var html = '[kaltura-widget wid="<?php echo $viewData["widgetId"]; ?>" size="'+size+'" /]';
-	var topWindow = Kaltura.getTopWindow();
-	topWindow.tinyMCE.execCommand('mceInsertRawHTML', false, html);
+	var playerWidth = "<?php echo $viewData["playerWidth"]; ?>";
+	var playerHeight = "<?php echo $viewData["playerHeight"]; ?>";
+	var playerType = "<?php echo $viewData["playerType"]; ?>";
 	
-	setTimeout('topWindow.tb_remove()', 0);
+	var html = '[kaltura-widget wid="<?php echo $viewData["widgetId"]; ?>" width="'+playerWidth+'" height="'+playerHeight+'" type="'+playerType+'" /]';
+
+	// lets make it safe
+	try
+	{
+		var topWindow = Kaltura.getTopWindow();
+	
+		if (topWindow.tinyMCE && topWindow.tinyMCE.get('content') && !topWindow.tinyMCE.get('content').isHidden()) 
+		{
+			topWindow.tinyMCE.execCommand('mceInsertRawHTML', false, html);
+		}
+		else 
+		{
+			topWindow.edInsertContent(topWindow.document.getElementById('content'), html);
+		}
+		setTimeout('topWindow.tb_remove()', 0);
+	}
+	catch(e) 
+	{
+		jQuery(function () {
+			jQuery("#kalturaEditTable").show();
+			jQuery("#txtCode").val(html);
+		});
+	}
 </script>
+<div class="kalturaTab">
+	<form method="post" class="kalturaForm">
+		<table id="kalturaEditTable" class="form-table kalturaFormTable" style="display: none;">
+			<tr>
+				<td>
+					<b>We were unable to insert the player code into the editor. Please copy and paste the code as it appears below.</b>
+					<br />
+					<br />
+					<textarea id="txtCode" rows="1" style="width: 90%" readonly="readonly"></textarea>
+					<br />
+					<br />
+					<center>
+						<input type="button" value="<?php echo attribute_escape( __( 'Close' ) ); ?>" name="close" class="button-secondary" />
+					</center>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
 <?php else: ?>
 <?php
 	$flashVarsStr = KalturaHelpers::flashVarsToString($viewData["flashVars"]);
 ?>
+<script type="text/javascript">
+	jQuery(function() {
+		jQuery("#playerCustomWidth").click(function(){
+			jQuery(this).siblings("[type=radio]").attr("checked", "checked");
+		});
+		
+		jQuery("#kalturaEditButtons input[type=submit]").click(function () {
+				jQuery("#playerWidthCustom").val(jQuery("#playerCustomWidth").val());
+				if (jQuery("#playerWidthCustom").attr("checked")) 
+				{
+					customWidth = jQuery("#playerCustomWidth").val();
+					if (!customWidth.match(/^[0-9]+$/)) 
+					{
+						jQuery("#playerCustomWidth").css("background-color", "red");
+						return false;
+					}
+				}
+				return true;
+		});
+	});
+</script>
 <div class="kalturaTab">
 	<form method="post" class="kalturaForm">
 		<table id="kalturaEditTable" class="form-table kalturaFormTable">
 			<tr>
 				<td valign="top" width="180">
 					<div id="divKalturaThumbnail" style="width:250px;height:244px;" class="kalturaHand" onclick="Kaltura.activatePlayer('divKalturaThumbnail','divKalturaPlayer');">
+						<div class="playerName"><nobr><?php echo @$kshow["name"]; ?></nobr></div>
 						<img src="<?php echo $viewData["thumbnailPlaceHolderUrl"]; ?>"  />
 					</div>
 					<div id="divKalturaPlayer" style="display: none"></div>
@@ -36,18 +99,39 @@
 						<a href="<?php echo kalturaGenerateTabUrl(array()); ?>"><img src="<?php echo kalturaGetPluginUrl(); ?>/images/back.gif" alt="Back"/></a>
 					</div>
 					<?php endif; ?>
-					<fieldset class="kalturaNoBorderFieldSet">
-						<legend><label for="kshowName">Select player size:</label></legend>
-					</fieldset>
-					<fieldset class="kalturaNoBorderFieldSet">
-						<input type="radio" name="playerSize" id="playerSizeLarge" value="large" checked="checked" />&nbsp;&nbsp;<label for="playerSizeLarge">Large (400x426)</label><br />
-					</fieldset>
-					<fieldset class="kalturaNoBorderFieldSet">
-						<input type="radio" name="playerSize" id="playerSizeMedium" value="small" />&nbsp;&nbsp;<label for="playerSizeMedium">Small (268x308)</label>
-					</fieldset>
-					<p id="kalturaEditButtons" class="submit">
-						<input type="submit" value="<?php echo attribute_escape( __( 'Insert into Post' ) ); ?>" name="sendToEditorButton" class="button-secondary" />
-					</p>
+					<table>
+						<tr>
+							<td valign="top">
+								<fieldset class="kalturaNoBorderFieldSet">
+									<legend><label for="kshowName">Select player design:</label></legend>
+									<?php $players = KalturaHelpers::getPlayers(); ?>
+									<?php foreach($players as $name => $details): ?>
+									<fieldset class="kalturaNoBorderFieldSet">
+										<input type="radio" name="playerType" id="playerType_<?php echo $name; ?>" value="<?php echo $name; ?>" <?php echo @get_option("kaltura_default_player_type") == $name ? "checked=\"checked\"" : ""; ?>/>&nbsp;&nbsp;<label for="playerType_<?php echo $name; ?>"><?php echo $details["name"]; ?></label><br />
+									</fieldset>	
+									<?php endforeach; ?>
+								</fieldset>
+							</td>
+							<td valign="top">
+								<fieldset class="kalturaNoBorderFieldSet">
+									<legend><label for="kshowName">Select player size:</label></legend>
+								</fieldset>
+								<fieldset class="kalturaNoBorderFieldSet">
+									<input type="radio" name="playerWidth" id="playerWidthLarge" value="410" checked="checked" />&nbsp;&nbsp;<label for="playerWidthLarge">Large (410x364)</label><br />
+								</fieldset>
+								<fieldset class="kalturaNoBorderFieldSet">
+									<input type="radio" name="playerWidth" id="playerWidthMedium" value="250" />&nbsp;&nbsp;<label for="playerWidthMedium">Small (250x244)</label>
+								</fieldset>
+								<fieldset class="kalturaNoBorderFieldSet">
+									<input type="radio" name="playerWidth" id="playerWidthCustom" value="" />&nbsp;&nbsp;<label for="playerCustomWidth">Custom width</label>
+									<input type="text" name="playerCustomWidth" id="playerCustomWidth" maxlength="3" size="3" />
+								</fieldset>
+								<p id="kalturaEditButtons" class="submit">
+									<input type="submit" value="<?php echo attribute_escape( __( 'Insert into Post' ) ); ?>" name="sendToEditorButton" class="button-secondary" />
+								</p>
+							</td>
+						</tr>
+					</table>
 				</td>
 			</tr>
 		</table>

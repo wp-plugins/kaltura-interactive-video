@@ -21,7 +21,8 @@
 	// add widget
 	$widget = new KalturaWidget();
 	$widget->kshowId = $kshowId;
-	$widget->uiConfId = KALTURA_UICONF_ID;
+	$player = KalturaHelpers::getPlayerByType(get_option('kaltura_comments_player_type'));
+	$widget->uiConfId = $player["uiConfId"];
 	$result = $kalturaClient->addwidget($sessionUser, $widget);
 	$widgetId = @$result["result"]["widget"]["id"];
 	$playerSize = "comments";

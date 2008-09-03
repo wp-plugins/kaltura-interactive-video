@@ -8,6 +8,7 @@
 			<tr>
 				<td valign="top" width="250">
 					<div id="divKalturaThumbnail" style="width:250px;height:244px;" class="kalturaHand" onclick="Kaltura.activatePlayer('divKalturaThumbnail','divKalturaPlayer');">
+						<div class="playerName"><nobr><?php echo @$kshow["name"]; ?></nobr></div>
 						<img src="<?php echo $viewData["thumbnailPlaceHolderUrl"]; ?>"  />
 					</div>
 					<div id="divKalturaPlayer" style="display: none"></div>

@@ -64,7 +64,7 @@ class KalturaHelpers
 	function getTinyPlayerFlashVars($ks, $kshowId) {
 		$sessionUser = kalturaGetSessionUser();
 		$flashVars = KalturaHelpers::getKalturaPlayerFlashVars($ks, $kshowId, -1);
-		$flashVars["layoutId"] = "tinyPlayer";
+		$flashVars["layoutId"] = "playerOnly";
 		return $flashVars;
 	}
 	
@@ -80,7 +80,8 @@ class KalturaHelpers
 	
 	function getSwfUrlForBaseWidget() 
 	{
-		return kalturaGetServerUrl() . "/index.php/kwidget/wid/" . KALTURA_BASE_WIDGET_ID;
+		$player = KalturaHelpers::getPlayerByType(get_option('kaltura_default_player_type'));
+		return kalturaGetServerUrl() . "/index.php/kwidget/wid/" . $player["uiConfId"];
 	}
 	
 	function getSwfUrlForWidget($widgetId)
@@ -162,12 +163,12 @@ class KalturaHelpers
 
 	function anonymousCommentsAllowed()
 	{
-		return @get_option("allow_anonymous_comments") == true ? true : false;
+		return @get_option("kaltura_allow_anonymous_comments") == true ? true : false;
 	}
 	
 	function videoCommentsEnabled()
 	{
-		return @get_option("enable_video_comments") == true ? true : false;
+		return @get_option("kaltura_enable_video_comments") == true ? true : false;
 	}
 	
 	function getThumbnailUrl($widgetId = null, $entryId = null, $width = 240, $height= 180, $version = 100000)
@@ -209,6 +210,50 @@ class KalturaHelpers
 		echo("<script type='text/javascript'>");
 		echo('var Kaltura_WPVersion = "' . $wp_version . '";');
 		echo("</script>");
+	}
+	
+	function getPlayers() 
+	{
+		global $KALTURA_GLOBAL_PLAYERS;
+		return $KALTURA_GLOBAL_PLAYERS;
+	}
+	
+	function getPlayerByType($type)
+	{
+		$players = KalturaHelpers::getPlayers();
+		if (array_key_exists($type, $players))
+		{
+			$player = $players[$type];
+		}
+		else
+		{
+			$player = $players[get_option('kaltura_default_player_type')];
+		}
+		
+		return $player;
+	}
+	
+	function calculatePlayerHeight($type, $width)
+	{
+		$player = KalturaHelpers::getPlayerByType($type);
+		
+		$aspectRatio = (@$player["videoAspectRatio"] ? $player["videoAspectRatio"] : "4:3");
+		$hSpacer = (@$player["horizontalSpacer"] ? $player["horizontalSpacer"] : 0);
+		$vSpacer = (@$player["verticalSpacer"] ? $player["verticalSpacer"] : 0); 
+		
+		switch($aspectRatio)
+		{
+			case "4:3":
+				$screenHeight = ($width - $hSpacer) / 4 * 3;
+				$height = $screenHeight + $vSpacer;
+				break;
+			case "16:9":
+				$screenHeight = ($width - $hSpacer) / 16 * 9;
+				$height = $screenHeight + $vSpacer;
+				break;
+		}
+		
+		return round($height);
 	}
 }
 ?>

@@ -26,7 +26,7 @@ a.kalturaLink:hover { color: #6699CC; }
 ul#kalturaBrowse { list-style: none; padding: 0 0 0 5px; margin: 0; }
 ul#kalturaBrowse li { float: left; width: 180px; height: 175px; margin: 0 10px 15px 10px; padding: 10px 0 5px 0; text-align: center; background-color: #E1EAEF; border: solid 1px #AED3E3; }
 ul#kalturaBrowse li div.thumbnail { height: 100px; line-height: 100px; }
-ul#kalturaBrowse li .showName { line-height: 15px; height: 30px; font-size: 11px; font-weight: bold; color: #31302E; }
+ul#kalturaBrowse li .showName { line-height: 15px; height: 30px; font-size: 11px; font-weight: bold; color: #31302E; overflow: hidden; margin: 0 5px 0 5px; }
 ul#kalturaBrowse li .submit { text-align: center; padding-top: 5px; }
 ul#kalturaBrowse li input { font-size: 12px; }
 ul#kalturaBrowse li input.sendButton { width: 9em; }
@@ -35,12 +35,14 @@ ul#kalturaBrowse.library li { margin-left: 0; margin-right: 20px; }
 
 /* edit & send tabs */
 #kalturaEditTable { padding: 5px 0 0 5px; }
-#kalturaEditTable fieldset { padding: 5px 5px 10px 5px; margin-left: 15px; }
+#kalturaEditTable fieldset { padding: 5px 5px 10px 5px; }
 #kalturaEditTable fieldset legend { padding-bottom: 0px; }
 #kalturaEditButtons { padding: 15px 5px; margin-left: 15px; border: 0; }
 #kalturaEditButtons input { margin-right: 10px; }
 #kalturaPlayerSizeText { padding: 5px 0 10px 5px; font-weight: bold; }
 #kalturaEditTable .backDiv { text-align: right; }
+#kalturaEditTable .playerName { position: absolute; margin: 5px 0 0 5px; font-size: 20px; width: 170px; font-weight: bold; color: #000; overflow: hidden; }
+
 
 #kalturaCmsLogin { background-color: #E1EAEF; border: solid 1px #B4D5E5; margin: 5px 0 15px 0; }
 #kalturaCmsLogin .kalturaFirstRow td { padding-top: 10px; }

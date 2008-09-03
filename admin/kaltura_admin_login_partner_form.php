@@ -35,8 +35,8 @@
 			update_option("kaltura_cms_password", $password);
 			update_option("kaltura_permissions_add", 0);
 			update_option("kaltura_permissions_edit", 0);
-			update_option("enable_video_comments", true);
-			update_option("allow_anonymous_comments", true);
+			update_option("kaltura_enable_video_comments", true);
+			update_option("kaltura_allow_anonymous_comments", true);
 			
 			$viewData["success"] = true;
 		}

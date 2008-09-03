@@ -57,7 +57,7 @@
 				longname : 'Interactive Video',
 				author : 'Kaltura',
 				authorurl : 'http://www.kaltura.com',
-				infourl : 'http://www.kaltura.com/index.php/corp/wordpress_plugin',
+				infourl : 'http://corp.kaltura.com',
 				version : "1.0"
 			};
 		},
@@ -70,6 +70,10 @@
 		
 		_replaceTagEnd : '/>',
 		
+		_originalHeight: 0,
+		
+		_originalWidth: 0,
+		
 		_onBeforeSetContent : function(ed, obj) {
 			if (!obj.content)
 				return;
@@ -80,34 +84,70 @@
 			while ((startPos = contentData.indexOf(this._tagStart, startPos)) != -1) {
 				var endPos = contentData.indexOf(this._tagEnd, startPos);
 				var attribs = this._parseAttributes(contentData.substring(startPos + this._tagStart.length, endPos));
-				var kalturaAlign = "left";
-				if (attribs["align"]) {
-					if (attribs["align"] == "r")
-						kalturaAlign = "right";
-					else if (attribs["align"] == "m")
-						kalturaAlign = "middle";
+				
+				// set defaults if not found
+				if (!attribs['wid'])
+					attribs['wid'] = '';
+				
+				if (!attribs['size'])
+					attribs['size'] = 'custom';
+
+				if (!attribs['align'])
+					attribs['align'] = '';
+				
+				if (!attribs['width'] || !attribs['height'])
+				{
+					attribs['width'] = '410';
+					attribs['height'] = '364';
 				}
+				
+				// for backward compatibility, when we used specific size
+				if (attribs['size'] == 'large') 
+				{
+					attribs['width'] = '410';
+					attribs['height'] = '364';
+				}
+				
+				if (attribs['size'] == 'small')
+				{
+					attribs['width'] = '250';
+					attribs['height'] = '244';
+				}
+				
+				if (attribs['width'] == '410' && attribs['height'] == '364')
+					attribs['size'] = 'large';
+				
+				if (attribs['width'] == '250' && attribs['height'] == '244')
+					attribs['size'] = 'small';
 				
 				endPos += this._tagEnd.length;
 				var contentDataEnd = contentData.substr(endPos);
 				contentData = contentData.substr(0, startPos);
 
+				// build the image tag
 				contentData += '<img ';
 				contentData += 'id="wid' + attribs["wid"] + '" ';
-				contentData += 'src="' + (this._url + '/images/spacer.gif') + '" ';
+				contentData += 'src="' + (this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=410&height=364') + '" ';
 				contentData += 'title="Kaltura" ';
-				contentData += 'alt="Kaltura" '; 
-				contentData += 'class="kaltura_item kaltura_size_' + attribs["size"] + '" ';
-				contentData += 'align="' + kalturaAlign + '" ';
+				contentData += 'alt="Kaltura" ';
+				contentData += 'class="kaltura_item align' + attribs['align'] + '" '; 
+				/*contentData += 'class="kaltura_item kaltura_width_' + attribs['width'] + ' kaltura_height_' + attribs['height'] + ' kaltura_size_' + attribs['size'] + ' align' + attribs['align'] + '" ';*/
 				contentData += 'name="mce_plugin_kaltura_desc" ';
+				contentData += 'width="' + attribs['width'] + '" ';
+				contentData += 'height="' + attribs['height'] + '" ';
 				
-				if (attribs["size"] == "large")
-					contentData += 'style="background-image: url(\'' + this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=400&height=300\')" ';
-				else if (attribs["size"] == "large_wide_screen")
-					contentData += 'style="background-image: url(\'' + this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=400&height=225\')" ';
+				if (attribs['style'])
+					contentData += 'style="' + attribs['style'] + '" ';
+				
+				/*if (attribs["width"] == "410")
+					contentData += 'style="background-image: url(\'' + this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=410&height=364\')" ';
+				/*else if (attribs["width"] == "250")
+					contentData += 'style="background-image: url(\'' + this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=250&height=244\')" ';
 				else
-					contentData += 'style="background-image: url(\'' + this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=240&height=180\')" ';
+					contentData += 'style="background-image: url(\'' + this._url + '/../images/player_goes_here.gif\')" ';
+				*/
 				contentData += '/>';
+				
 				contentData += contentDataEnd;
 			}
 			
@@ -136,26 +176,51 @@
 					var contentDataEnd = contentData.substr(endPos);
 					contentData = contentData.substr(0, startPos);
 					
-					var sizeRegex = new RegExp("kaltura_size_(.*)");
-					
-					var sizeResult = sizeRegex.exec(className);
-					if (sizeResult && sizeResult.length >= 2)
-						kalturasize = sizeResult[1];
-					else
-						kalturasize = "small";
 					var wid = attribs['id'].replace('wid', '');
-					var kalturaalign = "l" // its the default
-					if (attribs['align']) {
-						if (attribs['align'] == "right")
-							kalturaalign = "r"
-						else if (attribs['align'] == "middle")
-							kalturaalign = "m"
-					}
 
 					contentData += this._tagStart + ' ';
-					contentData += 'wid="' + wid + '" ';
-					contentData += 'size="' + kalturasize + '" ';
-					contentData += 'align="' + kalturaalign + '" ';
+					contentData += 'wid="' + wid + '" '; // widget id
+					
+					contentData += 'width="' + attribs['width'] + '" ';
+					contentData += 'height="' + attribs['height'] + '" ';
+					
+					if (attribs['style'])
+						contentData += 'style="' + attribs['style'] + '" ';
+					
+					// get the attribs that we saved in the class name
+					var classAttribs = className.split(" "); 
+					for(var j = 0; j < classAttribs.length; j++) {
+						switch (classAttribs[j])
+						{
+							case 'alignright':
+								attribs['align'] = 'right';
+								break;
+							case 'alignleft':
+								attribs['align'] = 'left';
+								break;
+							case 'aligncenter':
+								attribs['align'] = 'center';
+								break;
+								/*
+							default:
+								classAttrArr = classAttribs[j].match(/kaltura_(\w*)_(\w*)/);
+								if (classAttrArr && classAttrArr.length == 3) {
+									switch(classAttrArr[1]) {
+										case 'width': //width
+											contentData += 'width="' + classAttrArr[2] + '" ';
+											break;
+										case 'height': //height
+											contentData += 'height="' + classAttrArr[2] + '" ';
+											break;
+									}
+								}
+								break;*/
+						}
+					}
+					
+					if (attribs['align'])
+						contentData += 'align="' + attribs['align'] + '" '; // align
+					
 					contentData += this._tagEnd;
 					contentData += contentDataEnd;
 				}

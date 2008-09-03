@@ -67,7 +67,7 @@
 	// add event for the tabs menu link to restore the original modal dimensions
 	jQuery('#media-upload-header li a').click(function () {
 		if (jQuery(this).parent().get(0).id == "tab-kaltura")
-			return;
+			return false;
 			
 		topWindow.jQuery("#TB_iframeContent").stop();
 		topWindow.jQuery("#TB_window").stop();
@@ -84,10 +84,10 @@
 		var tabHref = this.href;
 		topWindow.Kaltura.restoreModalSize(
 			function () {
-	      		window.location.href = tabHref
+	      		window.location.href = tabHref;
       		}
       	); 
-		
+
 		return false;
 	});
 	
@@ -96,9 +96,6 @@
 		if (Kaltura.isMacFF())
 			Kaltura.showTinyMCEToolbar();
 	})
-
-	// kaltura page shouldn't refresh the tab
-	jQuery("#tab-kaltura a").get(0).href = "#";
 
 	if (Kaltura.compareWPVersion("2.6", ">=")) {
 		topWindow.Kaltura.hackModalBoxWp26();

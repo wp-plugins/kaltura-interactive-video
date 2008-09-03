@@ -60,7 +60,13 @@ if (KalturaHelpers::compareWPVersion("2.6", "<")) {
 // tiny mce
 add_filter('mce_external_plugins', 'kaltura_add_mce_plugin'); // add the kaltura mce plugin
 
+add_action('activate_kaltura-interactive-video/interactive_video.php', 'kaltura_activate');
 
+function kaltura_activate()
+{
+	update_option("kaltura_default_player_type", "white");
+	update_option("kaltura_comments_player_type", "white");
+}
 
 function kaltura_admin_page()
 {
@@ -142,6 +148,13 @@ EOF;
 
 function kaltura_add_upload_tab($content)
 {
+	$content["kaltura"] = __("Interactive Video");
+	return $content;
+}
+
+function kaltura_add_upload_tab_interactive_video_only($content)
+{
+	$content = array();
 	$content["kaltura"] = __("Add Interactive Video");
 	$content["kaltura_browse"] = __("Browse Interactive Videos");
 	return $content;
@@ -159,6 +172,8 @@ function kaltura_tab()
 
 function kaltura_tab_content()
 {
+	unset($GLOBALS['wp_filter']['media_upload_tabs']); // remove all registerd filters for the tabs
+	add_filter("media_upload_tabs", "kaltura_add_upload_tab_interactive_video_only"); // register our filter for the tabs
 	media_upload_header(); // will add the tabs menu
 	if (!get_option('kaltura_partner_id'))
 	{
@@ -203,6 +218,8 @@ function kaltura_browse_tab()
 
 function kaltura_tab_browse_content()
 {
+	unset($GLOBALS['wp_filter']['media_upload_tabs']); // remove all registerd filters for the tabs
+	add_filter("media_upload_tabs", "kaltura_add_upload_tab_interactive_video_only"); // register our filter for the tabs
 	media_upload_header(); // will add the tabs menu
 	
 	require_once("lib/kaltura_library_controller.php");
@@ -233,8 +250,8 @@ function _kaltura_replace_tags($content, $isComment) {
 		$tagEndPos = strpos($content, "/]", $tagStartPos); 
 		$kalturaTag = substr($content, $tagStartPos, $tagEndPos - $tagStartPos + 2);
 		
-		// parse the parameters from the tag
-		$params = _kaltura_get_params_from_tag($kalturaTag);
+		// parse the parameters from the tag using the build in wp shortcode support
+		$params = shortcode_parse_atts($kalturaTag); 
 
 		// get the embed options from the params
 		$embedOptions = _kaltura_get_embed_options($params, $isComment);
@@ -273,8 +290,18 @@ function _kaltura_replace_tags($content, $isComment) {
 			{
 				$divId = "kaltura_wrapper_" . $embedOptions["wid"];
 				$playerId = "kaltura_player_" . $embedOptions["wid"];
+				$style = '';
+				$style .= 'width:' . $embedOptions["width"] .'px;';
+				$style .= 'height:' . $embedOptions["height"] . 'px;';
+				if (@$embedOptions["align"])
+					$style .= 'float:' . $embedOptions["align"] . ';';
+					
+				// append the manual style properties
+				if (@$embedOptions["style"])
+					$style .= $embedOptions["style"];
+					
 				$html = '
-						<div id="' . $divId . '" style="text-align:' . $embedOptions["align"] . ';"><a href="http://corp.kaltura.com/">open source video management, player, editor, kaltura</a></div>
+						<span id="'.$divId.'" style="'.$style.'"><a href="http://corp.kaltura.com/">open source video management, player, editor, kaltura</a></span>
 						<script type="text/javascript">
 							var kaltura_swf = new SWFObject("' . $embedOptions["swfUrl"] . '", "' . $playerId . '", "' . $embedOptions["width"] . '", "' . $embedOptions["height"] . '", "9", "#000000");
 							kaltura_swf.addParam("wmode", "opaque");
@@ -324,124 +351,94 @@ function _kaltura_replace_tags($content, $isComment) {
 	return $content;
 }
 
-function _kaltura_get_params_from_tag($tag) {
-	$params = array();
-	$attributes_array = explode(' ', $tag);
-	for ($i = 1, $len = count($attributes_array); $i < $len; $i++) {
-		$attr = $attributes_array[$i];
-		if (!strpos($attr, "=")) {
-			continue;
-		}
-		$attr = str_replace('"', "", $attr);
-		$attr = str_replace("'", "", $attr);
-		$keyvalue = explode('=', $attr);
-		$key = $keyvalue[0];
-		$value = $keyvalue[1];
-		$params[$key] = $value;
-	}
-	return $params;
-}
-
 function _kaltura_get_embed_options($params, $isComment) {
 
 	if ($isComment) // comments player
 	{
-		$playerSize = _katlura_calculate_player_size("comments");
+		if (get_option('kaltura_comments_player_type'))
+			$type = get_option('kaltura_comments_player_type');
+		else
+			$type = get_option('kaltura_default_player_type'); 
+			
+		$params["width"] = 250;
+		$params["height"] = 244;
 		$layoutId = "tinyPlayer";
 	}
-	elseif ($params["size"] == "large") { // large size
-
+	else 
+	{ 
+		// backward compatibility
+		switch($params["size"])
+		{
+			case "large":
+				$params["width"] = 410;
+				$params["height"] = KalturaHelpers::calculatePlayerHeight($type, $params["width"]);
+				break;
+			case "small":
+				$params["width"] = 250;
+				$params["height"] = KalturaHelpers::calculatePlayerHeight($type, $params["width"]);
+				break;
+		}
 		
-		if (KalturaHelpers::userCanEdit()) {
-			$playerSize = _katlura_calculate_player_size("large");
-			$layoutId = "fullLarge";
-		}
-		else if(KalturaHelpers::userCanAdd()) {
-			$playerSize = _katlura_calculate_player_size("large");
-			$layoutId = "addOnlyLarge";
-		}
-		else {
-			$playerSize = _katlura_calculate_player_size("large");
-			$layoutId = "playerOnlyLarge";
-		}
+		// if width is missing set some default
+		if (!$params["width"]) 
+			$params["width"] = 410;
+			
+		// if height is missing, recalculate it
+		if (!$params["height"])
+			$params["height"] = KalturaHelpers::calculatePlayerHeight($type, $params["width"]);
+		
+		// check the permissions
+		if (KalturaHelpers::userCanEdit())
+			$layoutId = "full";
+		else if (KalturaHelpers::userCanAdd())
+			$layoutId = "addOnly";
+		else 
+			$layoutId = "playerOnly";
+			
+		if ($params["size"] == "large_wide_screen")  // FIXME: temp hack
+			$layoutId .= "&wideScreen=1";
 	}
-	elseif (($params["size"] == "large_wide_screen"))
+	
+	// align
+	switch ($params["align"])
 	{
-		$playerSize = _katlura_calculate_player_size("large_wide_screen");
-		$layoutId = "playerOnlyLarge&wideScreen=1"; // FIXME: temp hack
+		case "r":
+		case "right":
+			$align = "right";
+			break;
+		case "m": 
+		case "center":
+			$align = "center";
+			break;
+		case "l":
+		case "left":
+			$align = "left";
+			break;
+		default:
+			$align = "";			
 	}
-    else { // small size
-    	if (KalturaHelpers::userCanEdit()) {
-			$playerSize = _katlura_calculate_player_size("small");
-			$layoutId = "fullSmall";
-		}
-		else if(KalturaHelpers::userCanAdd()) {
-			$playerSize = _katlura_calculate_player_size("small");
-			$layoutId = "addOnlySmall";
-		}
-		else {
-			$playerSize = _katlura_calculate_player_size("small");
-			$layoutId = "playerOnlySmall";
-		}
-	}
-	
-	if ($params["align"] == "r")
-		$align = "right";
-	else if ($params["align"] == "m")
-		$align = "center";
-	else {
-		$align = "left";			
-	}
-	
+		
 	if ($_SERVER["SERVER_PORT"] == 443)
 		$protocol = "https://";
 	else
-		$protocol = "http://"; 
+		$protocol = "http://";
+		 
+	$postUrl = $protocol . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 
-	$flashVarsStr =  "layoutId=" . $layoutId . "&pd_original_url=" . urlencode($protocol . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+	$flashVarsStr =  "layoutId=" . $layoutId . "&pd_original_url=" . urlencode($postUrl);
 	
 	$wid = $params["wid"];
 	$swfUrl = KalturaHelpers::getSwfUrlForWidget($wid);
 
 	return array(
 		"flashVars" => $flashVarsStr,
-		"height" => $playerSize["height"],
-		"width" => $playerSize["width"],
+		"height" => $params["height"],
+		"width" => $params["width"],
 		"align" => $align,
+		"style" => @$params["style"],
 		"wid" => $wid,
 		"swfUrl" => $swfUrl
 	);
-}
-
-function _katlura_calculate_player_size($size)
-{
-	switch($size)
-	{
-		case "large":
-			return array(
-				"width" => (400 + 10),
-				"height" => (300 + 30 + 34)  
-			);
-			break;
-		case "large_wide_screen":
-			return array(
-				"width" => (400 + 10),
-				"height" => (225 + 30 + 34)  
-			);
-			break;
-		case "comments":
-			return array(
-				"width" => (240 + 10),
-				"height" => (180 + 30 + 34)
-			);
-			break;
-		case "small":
-			return array(
-				"width" => (240 + 10),
-				"height" => (180 + 30 + 34)
-			);
-			break;
-	}
 }
 
 if ( !get_option('kaltura_partner_id') && !isset($_POST['submit']) && !strpos($_SERVER["REQUEST_URI"], "page=interactive_video")) {

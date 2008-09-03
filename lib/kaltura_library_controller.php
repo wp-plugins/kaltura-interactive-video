@@ -86,15 +86,22 @@
 				}
 				else 
 				{
+					$width = $_POST["playerWidth"];
+					$type = $_POST["playerType"];
+					
 					// add widget
+					$player = KalturaHelpers::getPlayerByType($type);
 					$sessionUser = kalturaGetSessionUser();
 					$kalturaClient = getKalturaClient();
 					$widget = new KalturaWidget();
 					$widget->kshowId = $kshowId;
-					$widget->uiConfId = KALTURA_UICONF_ID;
+					$widget->uiConfId = $player["uiConfId"];
 					$result = $kalturaClient->addwidget($sessionUser, $widget);
 					$widgetId = $result["result"]["widget"]["id"];
-					$viewData["playerSize"] = $_POST["playerSize"];
+					
+					$viewData["playerWidth"] = $width;
+					$viewData["playerHeight"] = KalturaHelpers::calculatePlayerHeight($type, $width);
+					$viewData["playerType"] = $type;
 					$viewData["widgetId"] = $widgetId;
 					$redirectUrl = kalturaGenerateTabUrl(array("kaction" => "browse"));
 					require_once(dirname(__FILE__) . "/../view/view_send_to_editor.php");

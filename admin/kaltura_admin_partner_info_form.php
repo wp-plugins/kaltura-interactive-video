@@ -8,11 +8,16 @@
 		$permissions_edit = $_POST["permissions_edit"];
 		$enable_video_comments = @$_POST["enable_video_comments"] ? true : false;
 		$allow_anonymous_comments = @$_POST["allow_anonymous_comments"] ? true : false;
+		$default_player_type = $_POST["default_player_type"];
+		$comments_player_type = $_POST["comments_player_type"];
 		 
 		update_option("kaltura_permissions_add", $permissions_add);
 		update_option("kaltura_permissions_edit", $permissions_edit);
-		update_option("enable_video_comments", $enable_video_comments);
-		update_option("allow_anonymous_comments", $allow_anonymous_comments);
+		update_option("kaltura_enable_video_comments", $enable_video_comments);
+		update_option("kaltura_allow_anonymous_comments", $allow_anonymous_comments);
+		update_option("kaltura_default_player_type", $default_player_type);
+		update_option("kaltura_comments_player_type", $comments_player_type);
+
 		
 		$viewData["showMessage"] = true;
 	}
@@ -72,7 +77,8 @@
 			</tr>
 			<tr class="kalturaLastRow">
 				<td colspan="2" align="right" style="padding-top: 10px;">
-					<a href="#" onclick="document.getElementById('frmCmsLogin').submit()" class="kalturaLink"><?php _e('CMS Login'); ?></a>
+					<!-- <a href="#" onclick="document.getElementById('frmCmsLogin').submit()" class="kalturaLink"><?php _e('CMS Login'); ?></a>-->
+					<b><u>Updated CMS coming soon</u></b>
 				</td>
 			</tr>
 		</table>
@@ -100,15 +106,33 @@
 			<tr valign="top">
 				<td><?php _e("Enable video comments?"); ?></td>
 				<td>
-					<input type="checkbox" id="enable_video_comments" name="enable_video_comments" <?php echo @get_option("enable_video_comments") ? "checked=\"checked\"" : ""; ?> />
+					<input type="checkbox" id="enable_video_comments" name="enable_video_comments" <?php echo @get_option("kaltura_enable_video_comments") ? "checked=\"checked\"" : ""; ?> />
 					<br />
 				</td>
 			</tr>
 			<tr valign="top">
 				<td><?php _e("Allow anonymous video comments?"); ?></td>
 				<td>
-					<input type="checkbox" id="allow_anonymous_comments" name="allow_anonymous_comments" <?php echo @get_option("allow_anonymous_comments") ? "checked=\"checked\"" : ""; ?> />
+					<input type="checkbox" id="allow_anonymous_comments" name="allow_anonymous_comments" <?php echo @get_option("kaltura_allow_anonymous_comments") ? "checked=\"checked\"" : ""; ?> />
 					<br />
+				</td>
+			</tr>
+			<tr valign="top">
+				<td><?php _e("Video comments player design:"); ?></td>
+				<td>
+					<?php $players = KalturaHelpers::getPlayers(); ?>
+					<?php foreach($players as $name => $details): ?>
+						<input type="radio" name="comments_player_type" id="comments_player_type_<?php echo $name; ?>" value="<?php echo $name; ?>" <?php echo @get_option("kaltura_comments_player_type") == $name ? "checked=\"checked\"" : ""; ?>/>&nbsp;&nbsp;<label for="comments_player_type_<?php echo $name; ?>"><?php echo $details["name"]; ?></label><br />
+					<?php endforeach; ?>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td><?php _e("Default player design:"); ?></td>
+				<td>
+					<?php $players = KalturaHelpers::getPlayers(); ?>
+					<?php foreach($players as $name => $details): ?>
+						<input type="radio" name="default_player_type" id="default_player_type_<?php echo $name; ?>" value="<?php echo $name; ?>" <?php echo @get_option("kaltura_default_player_type") == $name ? "checked=\"checked\"" : ""; ?>/>&nbsp;&nbsp;<label for="default_player_type_<?php echo $name; ?>"><?php echo $details["name"]; ?></label><br />
+					<?php endforeach; ?>
 				</td>
 			</tr>
 			<tr>
