@@ -17,7 +17,7 @@
 			$partner->adminName = $adminName;
 			$partner->url1 = $webSiteUrl;
 			$partner->adminEmail = $adminEmail;
-			$partner->description = "Wordpress plugin";
+			$partner->description = "Wordpress plugin|"+$wp_version;
 	
 			$sessionUser = kalturaGetSessionUser();
 			$config = kalturaGetServiceConfiguration();
@@ -97,6 +97,7 @@
 			Note that a Kaltura Partner ID has been created for you, and an email has been sent to the specified email address containing the ID information. The email you received also includes a link and a password to the Kaltura Content Management System (CMS), where you can track and manage all information related to the Interactive Video plugin.<br />
 		</p>
 		<br />
+		<iframe src="http://corp.kaltura.com/activation/wordpress/p/<?php echo get_option("kaltura_partner_id"); ?>" width="1" height="1" border="0" style="border: 0;"></iframe>
 		<div class="wrap">
 			<a href="#" onclick="window.location.href = 'options-general.php?page=interactive_video'"><?php _e('Continue...'); ?></a>
 		</div>
