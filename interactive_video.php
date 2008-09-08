@@ -382,11 +382,11 @@ function _kaltura_get_embed_options($params, $isComment) {
 		{
 			case "large":
 				$params["width"] = 410;
-				$params["height"] = KalturaHelpers::calculatePlayerHeight(get_option('kaltura_default_player_type'), $params["width"]);
+				$params["height"] = 364;
 				break;
 			case "small":
 				$params["width"] = 250;
-				$params["height"] = KalturaHelpers::calculatePlayerHeight(get_option('kaltura_default_player_type'), $params["width"]);
+				$params["height"] = 244;
 				break;
 		}
 		
