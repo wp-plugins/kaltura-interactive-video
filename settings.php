@@ -14,7 +14,8 @@
 				"previewWidgetId" => 511,
 				"horizontalSpacer" => 10,
 				"verticalSpacer" => 64,
-				"videoAspectRatio" => "4:3"
+				"videoAspectRatio" => "4:3",
+				"previewHeaderColor" => "#000"
 			),
 		"dark" => 
 			array(
@@ -23,7 +24,8 @@
 				"previewWidgetId" => 513,
 				"horizontalSpacer" => 10,
 				"verticalSpacer" => 64,
-				"videoAspectRatio" => "4:3"
+				"videoAspectRatio" => "4:3",
+				"previewHeaderColor" => "#fff"
 			),
 		"grey" => 
 			array(
@@ -32,7 +34,8 @@
 				"previewWidgetId" => 515,
 				"horizontalSpacer" => 10,
 				"verticalSpacer" => 64,
-				"videoAspectRatio" => "4:3"
+				"videoAspectRatio" => "4:3",
+				"previewHeaderColor" => "#31302E"
 			)
 	);
 ?>

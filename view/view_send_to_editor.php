@@ -64,8 +64,9 @@
 					</div>
 					<div id="divKalturaPlayer" style="display: none"></div>
 					<script type="text/javascript">
-						function embedPreviewPlayer(swfUrl, playerType) {
+						function embedPreviewPlayer(swfUrl, playerType, previewHeaderColor) {
 							jQuery("#thumbnailPreview").attr('src', '<?php echo $viewData["thumbnailPlaceHolderUrl"]; ?>&player_type='+playerType);
+							jQuery("#divKalturaThumbnail .playerName").css('color', previewHeaderColor);
 							var kalturaSwf = new SWFObject(swfUrl, "swfKalturaPlayer", "250", "244", "9", "#000000");
 							kalturaSwf.addParam("flashVars", "<?php echo $flashVarsStr; ?>");
 							kalturaSwf.addParam("wmode", "opaque");
@@ -89,11 +90,11 @@
 									<legend><label for="kshowName">Select player design:</label></legend>
 									<?php $players = KalturaHelpers::getPlayers(); ?>
 									<?php foreach($players as $name => $details): ?>
-									<fieldset class="kalturaNoBorderFieldSet" onclick="embedPreviewPlayer('<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>', '<?php echo $name; ?>');">
+									<fieldset class="kalturaNoBorderFieldSet" onclick="jQuery(this).find('input').attr('checked', true); embedPreviewPlayer('<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>', '<?php echo $name; ?>', '<?php echo @$details["previewHeaderColor"]; ?>');">
 										<input type="radio" name="playerType" id="playerType_<?php echo $name; ?>" value="<?php echo $name; ?>" <?php echo @get_option("kaltura_default_player_type") == $name ? "checked=\"checked\"" : ""; ?>/>&nbsp;&nbsp;<label for="playerType_<?php echo $name; ?>"><?php echo $details["name"]; ?></label><br />
 										<?php if (@get_option("kaltura_default_player_type") == $name): ?>
 											<script type="text/javascript">
-												embedPreviewPlayer('<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>', '<?php echo $name; ?>');
+												embedPreviewPlayer('<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>', '<?php echo $name; ?>', '<?php echo @$details["previewHeaderColor"]; ?>');
 											</script>
 										<?php endif; ?>
 									</fieldset>	
