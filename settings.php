@@ -7,9 +7,9 @@
 	define("KALTURA_KCW_UICONF_FOR_SE", 504);
 	
 	$KALTURA_GLOBAL_PLAYERS = array (
-		"white" => 
+		"whiteblue" => 
 			array(
-				"name" => "White", 
+				"name" => "White/Blue", 
 				"uiConfId" => 510,
 				"previewWidgetId" => 511,
 				"horizontalSpacer" => 10,
@@ -25,9 +25,9 @@
 				"verticalSpacer" => 64,
 				"videoAspectRatio" => "4:3"
 			),
-		"romantic" => 
+		"grey" => 
 			array(
-				"name" => "Romantic", 
+				"name" => "Grey", 
 				"uiConfId" => 514,
 				"previewWidgetId" => 515,
 				"horizontalSpacer" => 10,

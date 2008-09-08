@@ -78,9 +78,9 @@ class KalturaHelpers
 		return substr($flashVarsStr, 0, strlen($flashVarsStr) - 1);
 	}
 	
-	function getSwfUrlForBaseWidget() 
+	function getSwfUrlForBaseWidget($type) 
 	{
-		$player = KalturaHelpers::getPlayerByType(get_option('kaltura_default_player_type'));
+		$player = KalturaHelpers::getPlayerByType($type);
 		return kalturaGetServerUrl() . "/index.php/kwidget/wid/" . $player["uiConfId"];
 	}
 	

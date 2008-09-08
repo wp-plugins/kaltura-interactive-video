@@ -41,7 +41,7 @@ ul#kalturaBrowse.library li { margin-left: 0; margin-right: 20px; }
 #kalturaEditButtons input { margin-right: 10px; }
 #kalturaPlayerSizeText { padding: 5px 0 10px 5px; font-weight: bold; }
 #kalturaEditTable .backDiv { text-align: right; }
-#kalturaEditTable .playerName { position: absolute; margin: 5px 0 0 5px; font-size: 20px; width: 170px; font-weight: bold; color: #000; overflow: hidden; }
+#kalturaEditTable .playerName { position: absolute; margin: 5px 0 0 5px; font-size: 14px; width: 200px; font-weight: normal; color: #000; overflow: hidden; }
 
 
 #kalturaCmsLogin { background-color: #E1EAEF; border: solid 1px #B4D5E5; margin: 5px 0 15px 0; }

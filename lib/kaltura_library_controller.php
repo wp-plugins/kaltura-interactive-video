@@ -32,12 +32,12 @@
 					$kshow = KalturaModel::getKshow($kalturaClient, $kshowId);
 					$flashVars = KalturaHelpers::getTinyPlayerFlashVars($kalturaClient->getKs(), $kshowId);
 					$entryId  = @$kshow["showEntry"]["id"];
-					$thumbnail = (@$kshow["showEntry"]["thumbnailUrl"]) ? $kshow["showEntry"]["thumbnailUrl"] . "/width/240/height/180/crop_provider/wordpress_comment_placeholder" : "";
+					$thumbnail = kalturaGetPluginUrl() . "/thumbnails/get_preview_thumbnail.php?thumbnail_url=" . @$kshow["showEntry"]["thumbnailUrl"] . "&player_type=" . get_option('kaltura_default_player_type');
 					$viewData["kshow"] = $kshow;
 					$viewData["entryId"] = $entryId;
 					$viewData["flashVars"] = $flashVars;
 					$viewData["flashVars"]["autoPlay"] = "true";
-					$viewData["swfUrl"] = KalturaHelpers::getSwfUrlForBaseWidget();
+					$viewData["swfUrl"] = KalturaHelpers::getSwfUrlForBaseWidget(get_option('kaltura_default_player_type'));
 					$viewData["thumbnailPlaceHolderUrl"] = $thumbnail;
 					require_once(dirname(__FILE__) . "/../view/view_edit.php");
 					require_once(dirname(__FILE__) . "/../view/view_js_for_tabs.php");
@@ -74,12 +74,11 @@
 					$kshow = KalturaModel::getKshow($kalturaClient, $kshowId);
 					$flashVars = KalturaHelpers::getTinyPlayerFlashVars($kalturaClient->getKs(), $kshowId);
 					$entryId = @$kshow["showEntry"]["id"];
-					$thumbnail = (@$kshow["showEntry"]["thumbnailUrl"]) ? $kshow["showEntry"]["thumbnailUrl"] . "/width/240/height/180/crop_provider/wordpress_comment_placeholder" : "";
+					$thumbnail = kalturaGetPluginUrl() . "/thumbnails/get_preview_thumbnail.php?thumbnail_url=" . @$kshow["showEntry"]["thumbnailUrl"];
 					$viewData["kshow"] = $kshow;
 					$viewData["entryId"] = $entryId;
 					$viewData["flashVars"] = $flashVars;
 					$viewData["flashVars"]["autoPlay"] = "true";
-					$viewData["swfUrl"] = KalturaHelpers::getSwfUrlForBaseWidget();
 					$viewData["thumbnailPlaceHolderUrl"] = $thumbnail;
 					require_once(dirname(__FILE__) . "/../view/view_send_to_editor.php");
 					require_once(dirname(__FILE__) . "/../view/view_js_for_tabs.php");

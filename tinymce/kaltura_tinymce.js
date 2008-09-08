@@ -127,11 +127,10 @@
 				// build the image tag
 				contentData += '<img ';
 				contentData += 'id="wid' + attribs["wid"] + '" ';
-				contentData += 'src="' + (this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=410&height=364') + '" ';
+				contentData += 'src="' + (this._url + '/../thumbnails/placeholder.gif') + '" ';
 				contentData += 'title="Kaltura" ';
 				contentData += 'alt="Kaltura" ';
 				contentData += 'class="kaltura_item align' + attribs['align'] + '" '; 
-				/*contentData += 'class="kaltura_item kaltura_width_' + attribs['width'] + ' kaltura_height_' + attribs['height'] + ' kaltura_size_' + attribs['size'] + ' align' + attribs['align'] + '" ';*/
 				contentData += 'name="mce_plugin_kaltura_desc" ';
 				contentData += 'width="' + attribs['width'] + '" ';
 				contentData += 'height="' + attribs['height'] + '" ';
@@ -139,13 +138,6 @@
 				if (attribs['style'])
 					contentData += 'style="' + attribs['style'] + '" ';
 				
-				/*if (attribs["width"] == "410")
-					contentData += 'style="background-image: url(\'' + this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=410&height=364\')" ';
-				/*else if (attribs["width"] == "250")
-					contentData += 'style="background-image: url(\'' + this._url + '/../thumbnail_redirect.php?widget_id=' + attribs["wid"] + '&width=250&height=244\')" ';
-				else
-					contentData += 'style="background-image: url(\'' + this._url + '/../images/player_goes_here.gif\')" ';
-				*/
 				contentData += '/>';
 				
 				contentData += contentDataEnd;
@@ -155,10 +147,9 @@
 		},
 		
 		_onGetContent : function(ed, obj) {
-			//alert('_onGetContent');
 			if (!obj.content)
 				return;
-			//return;
+
 			var contentData = obj.content;
 			var startPos = 0;
 			while ((startPos = contentData.indexOf(this._replaceTagStart, startPos)) != -1) {

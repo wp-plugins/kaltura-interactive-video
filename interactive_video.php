@@ -81,7 +81,7 @@ function kaltura_library_page()
 
 function kaltura_add_mce_plugin($content) {
 	$pluginUrl = kalturaGetPluginUrl();
-	$content["kaltura"] = $pluginUrl . "/tinymce/kaltura_tinymce.js";
+	$content["kaltura"] = $pluginUrl . "/tinymce/kaltura_tinymce.js?v".kaltura_get_version();
 	return $content;
 }
   
@@ -110,18 +110,18 @@ function kaltura_print_js($content) {
 
 function kaltura_register_js() {
 	$plugin_url = kalturaGetPluginUrl();
-	wp_register_script('kaltura', $plugin_url . '/js/kaltura.js');
-	wp_register_script('swfobject', $plugin_url . '/js/swfobject.js');
+	wp_register_script('kaltura', $plugin_url . '/js/kaltura.js?v'.kaltura_get_version());
+	wp_register_script('swfobject', $plugin_url . '/js/swfobject.js?v'.kaltura_get_version());
 }
 
 function kaltura_head() {
 	$plugin_url = kalturaGetPluginUrl();
-	echo('<link rel="stylesheet" href="' . $plugin_url . '/css/kaltura.css" type="text/css" />');
+	echo('<link rel="stylesheet" href="' . $plugin_url . '/css/kaltura.css?v'.kaltura_get_version().'" type="text/css" />');
 }
 
 function kaltura_add_admin_css($content) {
 	$plugin_url = kalturaGetPluginUrl();
-	$content .= '<link rel="stylesheet" href="' . $plugin_url . '/css/kaltura.css" type="text/css" />' . "\n";
+	$content .= '<link rel="stylesheet" href="' . $plugin_url . '/css/kaltura.css?v'.kaltura_get_version().'" type="text/css" />' . "\n";
 	echo $content;
 }
 
@@ -263,6 +263,7 @@ function _kaltura_replace_tags($content, $isComment) {
 			$divId 			= "kaltura_wrapper_" . $wid;
 			$thumbnailDivId = "kaltura_thumbnail_" . $wid;
 			$playerId 		= "kaltura_player_" . $wid;
+			$link = '<a href="http://corp.kaltura.com/">free video player & video platform - interactive video, online video solution: video player, video editor - kaltura</a><br /><a href="http://corp.kaltura.com/download">wordpress video - wordpress plugin for integrated video on video blogs, and  video tools</a>';
 			
 			if ($isComment)
 			{
@@ -273,7 +274,7 @@ function _kaltura_replace_tags($content, $isComment) {
 						<div id="' . $thumbnailDivId . '" style="width:'.$width.'px;height:'.$height.'px;" class="kalturaHand" onclick="Kaltura.activatePlayer(\''.$thumbnailDivId.'\',\''.$divId.'\');">
 							<img src="' . $thumbnailPlaceHolderUrl . '" style="" />
 						</div>
-						<div id="' . $divId . '" style="height: '.$height.'px""><a href="http://corp.kaltura.com/">open source video management, player, editor, kaltura</a></div>
+						<div id="' . $divId . '" style="height: '.$height.'px"">'.$link.'</div>
 						<script type="text/javascript">
 							jQuery("#'.$divId.'").hide();
 							var kaltura_swf = new SWFObject("' . $embedOptions["swfUrl"] . '", "' . $playerId . '", "' . $width . '", "' . $height . '", "9", "#000000");
@@ -301,7 +302,7 @@ function _kaltura_replace_tags($content, $isComment) {
 					$style .= $embedOptions["style"];
 					
 				$html = '
-						<span id="'.$divId.'" style="'.$style.'"><a href="http://corp.kaltura.com/">open source video management, player, editor, kaltura</a></span>
+						<span id="'.$divId.'" style="'.$style.'">'.$link.'</span>
 						<script type="text/javascript">
 							var kaltura_swf = new SWFObject("' . $embedOptions["swfUrl"] . '", "' . $playerId . '", "' . $embedOptions["width"] . '", "' . $embedOptions["height"] . '", "9", "#000000");
 							kaltura_swf.addParam("wmode", "opaque");
@@ -349,6 +350,16 @@ function _kaltura_replace_tags($content, $isComment) {
 	}
 
 	return $content;
+}
+
+function kaltura_get_version() {
+	$plugin_data = implode( '', file( __FILE__ ));
+	if ( preg_match( "|Version:(.*)|i", $plugin_data, $version ))
+		$version = trim( $version[1] );
+	else
+		$version = '';
+	
+	return $version;
 }
 
 function _kaltura_get_embed_options($params, $isComment) {

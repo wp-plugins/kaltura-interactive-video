@@ -1,6 +1,8 @@
 <?php 
 	define('WP_USE_THEMES', false);
 	require('../../../wp-blog-header.php');
+	define('WP_ADMIN', TRUE);
+	auth_redirect();
 	require_once('settings.php');
 	require_once('lib/common.php');
 	require_once('lib/kaltura_helpers.php');

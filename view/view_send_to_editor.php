@@ -52,27 +52,7 @@
 <?php
 	$flashVarsStr = KalturaHelpers::flashVarsToString($viewData["flashVars"]);
 ?>
-<script type="text/javascript">
-	jQuery(function() {
-		jQuery("#playerCustomWidth").click(function(){
-			jQuery(this).siblings("[type=radio]").attr("checked", "checked");
-		});
-		
-		jQuery("#kalturaEditButtons input[type=submit]").click(function () {
-				jQuery("#playerWidthCustom").val(jQuery("#playerCustomWidth").val());
-				if (jQuery("#playerWidthCustom").attr("checked")) 
-				{
-					customWidth = jQuery("#playerCustomWidth").val();
-					if (!customWidth.match(/^[0-9]+$/)) 
-					{
-						jQuery("#playerCustomWidth").css("background-color", "red");
-						return false;
-					}
-				}
-				return true;
-		});
-	});
-</script>
+
 <div class="kalturaTab">
 	<form method="post" class="kalturaForm">
 		<table id="kalturaEditTable" class="form-table kalturaFormTable">
@@ -80,17 +60,20 @@
 				<td valign="top" width="180">
 					<div id="divKalturaThumbnail" style="width:250px;height:244px;" class="kalturaHand" onclick="Kaltura.activatePlayer('divKalturaThumbnail','divKalturaPlayer');">
 						<div class="playerName"><nobr><?php echo @$kshow["name"]; ?></nobr></div>
-						<img src="<?php echo $viewData["thumbnailPlaceHolderUrl"]; ?>"  />
+						<img id="thumbnailPreview" src=""  />
 					</div>
 					<div id="divKalturaPlayer" style="display: none"></div>
 					<script type="text/javascript">
-						var kalturaSwf = new SWFObject("<?php echo $viewData["swfUrl"]; ?>", "swfKalturaPlayer", "250", "244", "9", "#000000");
-						kalturaSwf.addParam("flashVars", "<?php echo $flashVarsStr; ?>");
-						kalturaSwf.addParam("wmode", "opaque");
-						kalturaSwf.addParam("allowScriptAccess", "always");
-						kalturaSwf.addParam("allowFullScreen", "true");
-						kalturaSwf.addParam("allowNetworking", "all");
-						kalturaSwf.write("divKalturaPlayer");
+						function embedPreviewPlayer(swfUrl, playerType) {
+							jQuery("#thumbnailPreview").attr('src', '<?php echo $viewData["thumbnailPlaceHolderUrl"]; ?>&player_type='+playerType);
+							var kalturaSwf = new SWFObject(swfUrl, "swfKalturaPlayer", "250", "244", "9", "#000000");
+							kalturaSwf.addParam("flashVars", "<?php echo $flashVarsStr; ?>");
+							kalturaSwf.addParam("wmode", "opaque");
+							kalturaSwf.addParam("allowScriptAccess", "always");
+							kalturaSwf.addParam("allowFullScreen", "true");
+							kalturaSwf.addParam("allowNetworking", "all");
+							kalturaSwf.write("divKalturaPlayer");
+						};
 					</script>
 				</td>
 				<td id="kalturaEditRight" valign="top">
@@ -106,8 +89,13 @@
 									<legend><label for="kshowName">Select player design:</label></legend>
 									<?php $players = KalturaHelpers::getPlayers(); ?>
 									<?php foreach($players as $name => $details): ?>
-									<fieldset class="kalturaNoBorderFieldSet">
+									<fieldset class="kalturaNoBorderFieldSet" onclick="embedPreviewPlayer('<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>', '<?php echo $name; ?>');">
 										<input type="radio" name="playerType" id="playerType_<?php echo $name; ?>" value="<?php echo $name; ?>" <?php echo @get_option("kaltura_default_player_type") == $name ? "checked=\"checked\"" : ""; ?>/>&nbsp;&nbsp;<label for="playerType_<?php echo $name; ?>"><?php echo $details["name"]; ?></label><br />
+										<?php if (@get_option("kaltura_default_player_type") == $name): ?>
+											<script type="text/javascript">
+												embedPreviewPlayer('<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>', '<?php echo $name; ?>');
+											</script>
+										<?php endif; ?>
 									</fieldset>	
 									<?php endforeach; ?>
 								</fieldset>
@@ -137,4 +125,23 @@
 		</table>
 	</form>			
 </div>
+<script type="text/javascript">
+	jQuery("#playerCustomWidth").click(function(){
+		jQuery(this).siblings("[type=radio]").attr("checked", "checked");
+	});
+	
+	jQuery("#kalturaEditButtons input[type=submit]").click(function () {
+			jQuery("#playerWidthCustom").val(jQuery("#playerCustomWidth").val());
+			if (jQuery("#playerWidthCustom").attr("checked")) 
+			{
+				customWidth = jQuery("#playerCustomWidth").val();
+				if (!customWidth.match(/^[0-9]+$/)) 
+				{
+					jQuery("#playerCustomWidth").css("background-color", "red");
+					return false;
+				}
+			}
+			return true;
+	});
+</script>
 <?php endif; ?>
