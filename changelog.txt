@@ -1,9 +1,10 @@
 Version 1.1
 -------------
-* Added new player layouts
-* Added custom sized players
-* Fixed align issue
+* Three different player styles to choose from
+* Custom sizing of the video player 
 * New TinyMCE integration (Kaltura video is edited like any other image, resize/caption/margin/align)
+* Advanced sharing options for videos
+* Fixed align issue
  
 Version 1.0
 -------------
