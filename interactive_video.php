@@ -64,8 +64,8 @@ add_action('activate_kaltura-interactive-video/interactive_video.php', 'kaltura_
 
 function kaltura_activate()
 {
-	update_option("kaltura_default_player_type", "white");
-	update_option("kaltura_comments_player_type", "white");
+	update_option("kaltura_default_player_type", "whiteblue");
+	update_option("kaltura_comments_player_type", "whiteblue");
 }
 
 function kaltura_admin_page()
@@ -382,11 +382,11 @@ function _kaltura_get_embed_options($params, $isComment) {
 		{
 			case "large":
 				$params["width"] = 410;
-				$params["height"] = KalturaHelpers::calculatePlayerHeight($type, $params["width"]);
+				$params["height"] = KalturaHelpers::calculatePlayerHeight(get_option('kaltura_default_player_type'), $params["width"]);
 				break;
 			case "small":
 				$params["width"] = 250;
-				$params["height"] = KalturaHelpers::calculatePlayerHeight($type, $params["width"]);
+				$params["height"] = KalturaHelpers::calculatePlayerHeight(get_option('kaltura_default_player_type'), $params["width"]);
 				break;
 		}
 		
@@ -396,7 +396,7 @@ function _kaltura_get_embed_options($params, $isComment) {
 			
 		// if height is missing, recalculate it
 		if (!$params["height"])
-			$params["height"] = KalturaHelpers::calculatePlayerHeight($type, $params["width"]);
+			$params["height"] = KalturaHelpers::calculatePlayerHeight(get_option('kaltura_default_player_type'), $params["width"]);
 		
 		// check the permissions
 		if (KalturaHelpers::userCanEdit())
