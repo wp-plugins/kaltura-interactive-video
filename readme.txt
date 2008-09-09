@@ -3,28 +3,33 @@ Contributors: Kaltura
 Donate link: http://community.kaltura.org/
 Tags: video,video comments,player,editor,rich-media,ria,interactive,collaboration,remix,mixing,mix,media,audio,video blog,video responses,video editor,vlog,podcast,kaltura,comments,Post,Posts,Images,Admin,Plugin,photo,picture,richmedia cms,media library,media,edit,participate,webcam,camera,record,YouTube,MySpace,Flickr,Facebook,CCMixter,Jamendo,New York Public Library,
 Requires at least: 2.5
-Tested up to: 2.6
-Stable tag: 1.0
+Tested up to: 2.6.1
+Stable tag: 1.1
 
 Easily add full interactive video capabilities to your blog.
 
 == Description ==
 
-Add interactive video capabilities to your blog! Enhance your WordPress blog with both basic and advanced video capabilities. Upload, record, import videos directly to your post, edit and remix video content, enable video responses, manage and track your video content and much more...
+Add interactive video capabilities to your blog!  This is not just another video embed tool - the plugin enables you to enhance your blog with both basic and advanced video capabilities.  Upload/ record/import videos directly to your post, edit and remix video content, enable video responses, manage and track your video content and much more...
 
 Highlights:
 
-* Upload, record from webcam and import all rich-media directly to your blog post;
-* Edit and remix videos using Kaltura's online full-featured video editor;
-* Easily import all rich media (video, audio, pictures...) from other sites and social networks, such as YouTube, MySpace, Flickr, CCMixter, Jamendo, New York Public Library etc. and;
-* Allow readers and subscribers to add video and audio comments, and to participate in collaborative videos;
-* Manage and track interactive videos through the management console;
-* Complete administrative capabilities. You decide who can add and edit videos;
-* Integration to the post wyswyg editor;
-* Easy installation that takes just 4 steps and a few minutes.
+* Upload, record from webcam and import all rich-media directly to your blog post; 
+* Edit and remix videos using Kaltura's online full-featured video editor; 
+* Easily import all rich media (video, audio, pictures...) from other sites and social networks, such as YouTube, MySpace, Flickr, CCMixter, Jamendo, New York Public Library etc. and; 
+* Allow readers and subscribers to add video and audio comments, and to participate in collaborative videos; 
+* Manage and track interactive videos through the management console; 
+* Complete administrative capabilities. You decide who can add and edit videos; 
+* Integration to the post wyswyg editor; 
+* Easy installation that takes just 4 steps and a few minutes. 
 
-Examples and pictures are on the plugin forum:
-http://community.kaltura.org/viewforum.php?f=4
+Version 1.1 includes many enhancements and fixes including:  
+* Three different player styles to choose from 
+* Custom sizing of the video player 
+* Advanced sharing options for videos 
+* New TinyMCE integration (Interactive Video is edited like any other image, resize/caption/margin/align) 
+
+Showcase your blog, see examples and pictures of the plugin and get support in our forum: http://community.kaltura.org/viewforum.php?f=4 
 
 
 == Installation ==
