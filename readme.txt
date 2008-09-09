@@ -24,6 +24,7 @@ Highlights:
 * Easy installation that takes just 4 steps and a few minutes. 
 
 Version 1.1 includes many enhancements and fixes including:  
+
 * Three different player styles to choose from 
 * Custom sizing of the video player 
 * Advanced sharing options for videos 
