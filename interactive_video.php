@@ -59,6 +59,7 @@ if (KalturaHelpers::compareWPVersion("2.6", "<")) {
 
 // tiny mce
 add_filter('mce_external_plugins', 'kaltura_add_mce_plugin'); // add the kaltura mce plugin
+add_filter('tiny_mce_version', 'kaltura_mce_version');
 
 add_action('activate_kaltura-interactive-video/interactive_video.php', 'kaltura_activate');
 
@@ -83,6 +84,10 @@ function kaltura_add_mce_plugin($content) {
 	$pluginUrl = kalturaGetPluginUrl();
 	$content["kaltura"] = $pluginUrl . "/tinymce/kaltura_tinymce.js?v".kaltura_get_version();
 	return $content;
+}
+
+function kaltura_mce_version($content) {
+	return $content . '_k'.kaltura_get_version();
 }
   
 function kaltura_add_admin_menu() {

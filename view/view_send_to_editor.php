@@ -23,10 +23,7 @@
 	}
 	catch(e) 
 	{
-		jQuery(function () {
-			jQuery("#kalturaEditTable").show();
-			jQuery("#txtCode").val(html);
-		});
+		var displayEditTable = true;
 	}
 </script>
 <div class="kalturaTab">
@@ -37,7 +34,7 @@
 					<b>We were unable to insert the player code into the editor. Please copy and paste the code as it appears below.</b>
 					<br />
 					<br />
-					<textarea id="txtCode" rows="1" style="width: 90%" readonly="readonly"></textarea>
+					<textarea id="txtCode" rows="3" style="width: 90%" readonly="readonly"></textarea>
 					<br />
 					<br />
 					<center>
@@ -48,6 +45,13 @@
 		</table>
 	</form>
 </div>
+<script>
+	if (displayEditTable)
+	{
+		jQuery("#kalturaEditTable").show();
+		jQuery("#txtCode").val(html);
+	}
+</script>
 <?php else: ?>
 <?php
 	$flashVarsStr = KalturaHelpers::flashVarsToString($viewData["flashVars"]);
