@@ -17,6 +17,7 @@
 			$partner->adminName = $adminName;
 			$partner->url1 = $webSiteUrl;
 			$partner->adminEmail = $adminEmail;
+			global $wp_version;
 			$partner->description = "Wordpress plugin|".$wp_version;
 	
 			$sessionUser = kalturaGetSessionUser();
