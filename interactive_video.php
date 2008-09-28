@@ -106,7 +106,7 @@ function kaltura_the_comment($content) {
 function kaltura_print_js($content) {
 	$content[] = 'kaltura';
 	$content[] = 'jquery';
-	$content[] = 'swfobject';
+	$content[] = 'kaltura_swfobject_1.5';
 	
 	KalturaHelpers::addWPVersionJS();
 	
@@ -116,7 +116,7 @@ function kaltura_print_js($content) {
 function kaltura_register_js() {
 	$plugin_url = kalturaGetPluginUrl();
 	wp_register_script('kaltura', $plugin_url . '/js/kaltura.js?v'.kaltura_get_version());
-	wp_register_script('swfobject', $plugin_url . '/js/swfobject.js?v'.kaltura_get_version());
+	wp_register_script('kaltura_swfobject_1.5', $plugin_url . '/js/swfobject.js?v'.kaltura_get_version(), array(), '1.5');
 }
 
 function kaltura_head() {
