@@ -396,17 +396,17 @@ function _kaltura_get_embed_options($params, $isComment) {
 		}
 		
 		// if width is missing set some default
-		if (!$params["width"]) 
+		if (!@$params["width"]) 
 			$params["width"] = 410;
 			
 		// if height is missing, recalculate it
-		if (!$params["height"])
+		if (!@$params["height"])
 			$params["height"] = KalturaHelpers::calculatePlayerHeight(get_option('kaltura_default_player_type'), $params["width"]);
-		
+			
 		// check the permissions
-		if (KalturaHelpers::userCanEdit())
+		if (KalturaHelpers::userCanEdit(@$params["editpermission"]))
 			$layoutId = "full";
-		else if (KalturaHelpers::userCanAdd())
+		else if (KalturaHelpers::userCanAdd(@$params["addpermission"]))
 			$layoutId = "addOnly";
 		else 
 			$layoutId = "playerOnly";

@@ -3,8 +3,10 @@
 	var playerWidth = "<?php echo $viewData["playerWidth"]; ?>";
 	var playerHeight = "<?php echo $viewData["playerHeight"]; ?>";
 	var playerType = "<?php echo $viewData["playerType"]; ?>";
+	var addPermission = "<?php echo $viewData["addPermission"]; ?>";
+	var editPermission = "<?php echo $viewData["editPermission"]; ?>";
 	
-	var html = '[kaltura-widget wid="<?php echo $viewData["widgetId"]; ?>" width="'+playerWidth+'" height="'+playerHeight+'" type="'+playerType+'" /]';
+	var html = '[kaltura-widget wid="<?php echo $viewData["widgetId"]; ?>" width="'+playerWidth+'" height="'+playerHeight+'" type="'+playerType+'" addPermission="'+addPermission+'" editPermission="'+editPermission+'" /]';
 
 	// lets make it safe
 	try
@@ -67,10 +69,22 @@
 						<img id="thumbnailPreview" src=""  />
 					</div>
 					<div id="divKalturaPlayer" style="display: none"></div>
+					<?php $players = KalturaHelpers::getPlayers(); ?>
+					
 					<script type="text/javascript">
-						function embedPreviewPlayer(swfUrl, playerType, previewHeaderColor) {
-							jQuery("#thumbnailPreview").attr('src', '<?php echo $viewData["thumbnailPlaceHolderUrl"]; ?>&player_type='+playerType);
-							jQuery("#divKalturaThumbnail .playerName").css('color', previewHeaderColor);
+						function embedPreviewPlayer(name) {
+							<?php foreach($players as $name => $details): ?>
+								var player_<?php echo $name; ?>_settings = {
+										url: "<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>",
+										name: "<?php echo $details["name"]; ?>",
+										previewHeaderColor: "<?php echo $details["previewHeaderColor"]; ?>"
+								};
+							<?php endforeach; ?>
+
+							var playerSettings = eval("player_" + name + "_settings");
+							var swfUrl = playerSettings.url;
+							jQuery("#thumbnailPreview").attr('src', '<?php echo $viewData["thumbnailPlaceHolderUrl"]; ?>&player_type='+name);
+							jQuery("#divKalturaThumbnail .playerName").css('color', playerSettings.previewHeaderColor);
 							var kalturaSwf = new SWFObject(swfUrl, "swfKalturaPlayer", "250", "244", "9", "#000000");
 							kalturaSwf.addParam("flashVars", "<?php echo $flashVarsStr; ?>");
 							kalturaSwf.addParam("wmode", "opaque");
@@ -91,18 +105,39 @@
 						<tr>
 							<td valign="top">
 								<fieldset class="kalturaNoBorderFieldSet">
-									<legend><label for="kshowName">Select player design:</label></legend>
+									<legend><label for="playerType">Select player design:</label></legend>
+									<select name="playerType" id="playerType" onchange="embedPreviewPlayer(this.options[this.selectedIndex].value);">
 									<?php $players = KalturaHelpers::getPlayers(); ?>
 									<?php foreach($players as $name => $details): ?>
-									<fieldset class="kalturaNoBorderFieldSet" onclick="jQuery(this).find('input').attr('checked', true); embedPreviewPlayer('<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>', '<?php echo $name; ?>', '<?php echo @$details["previewHeaderColor"]; ?>');">
-										<input type="radio" name="playerType" id="playerType_<?php echo $name; ?>" value="<?php echo $name; ?>" <?php echo @get_option("kaltura_default_player_type") == $name ? "checked=\"checked\"" : ""; ?>/>&nbsp;&nbsp;<label for="playerType_<?php echo $name; ?>"><?php echo $details["name"]; ?></label><br />
+										<option id="playerType_<?php echo $name; ?>" value="<?php echo $name; ?>" <?php echo @get_option("kaltura_default_player_type") == $name ? "selected=\"selected\"" : ""; ?>><?php echo $details["name"]; ?></option>
 										<?php if (@get_option("kaltura_default_player_type") == $name): ?>
-											<script type="text/javascript">
-												embedPreviewPlayer('<?php echo KalturaHelpers::getSwfUrlForBaseWidget($name); ?>', '<?php echo $name; ?>', '<?php echo @$details["previewHeaderColor"]; ?>');
-											</script>
+											<?php $selectedPlayerName = $name; ?>
 										<?php endif; ?>
-									</fieldset>	
 									<?php endforeach; ?>
+									</select>
+									<?php if ($selectedPlayerName): ?>
+									<script type="text/javascript">
+										embedPreviewPlayer('<?php echo $selectedPlayerName; ?>');
+									</script>
+									<?php endif; ?>
+								</fieldset>	
+								<fieldset class="kalturaNoBorderFieldSet">
+									<legend><label for="addPermission">Who can add to video:</label></legend>
+									<select name="addPermission" id="addPermission">
+										<option value="3" <?php echo @get_option("kaltura_permissions_add") == "3" ? "selected=\"selected\"" : ""; ?>>Blog Administrators</option>
+										<option value="2" <?php echo @get_option("kaltura_permissions_add") == "2" ? "selected=\"selected\"" : ""; ?>>Blog Editors/Contributors & Authors</option>
+										<option value="1" <?php echo @get_option("kaltura_permissions_add") == "1" ? "selected=\"selected\"" : ""; ?>>Blog Subscribers</option>										
+										<option value="0" <?php echo @get_option("kaltura_permissions_add") == "0" ? "selected=\"selected\"" : ""; ?>>Everybody</option>
+									</select>
+								</fieldset>
+								<fieldset class="kalturaNoBorderFieldSet">	
+									<legend><label for="editPermission">Who can edit to video:</label></legend>
+									<select name="editPermission" id="editPermission">
+										<option value="3" <?php echo @get_option("kaltura_permissions_edit") == "3" ? "selected=\"selected\"" : ""; ?>>Blog Administrators</option>
+										<option value="2" <?php echo @get_option("kaltura_permissions_edit") == "2" ? "selected=\"selected\"" : ""; ?>>Blog Editors/Contributors & Authors</option>
+										<option value="1" <?php echo @get_option("kaltura_permissions_edit") == "1" ? "selected=\"selected\"" : ""; ?>>Blog Subscribers</option>										
+										<option value="0" <?php echo @get_option("kaltura_permissions_edit") == "0" ? "selected=\"selected\"" : ""; ?>>Everybody</option>
+									</select>
 								</fieldset>
 							</td>
 							<td valign="top">
@@ -113,7 +148,7 @@
 									<input type="radio" name="playerWidth" id="playerWidthLarge" value="410" checked="checked" />&nbsp;&nbsp;<label for="playerWidthLarge">Large (410x364)</label><br />
 								</fieldset>
 								<fieldset class="kalturaNoBorderFieldSet">
-									<input type="radio" name="playerWidth" id="playerWidthMedium" value="250" />&nbsp;&nbsp;<label for="playerWidthMedium">Small (250x244)</label>
+									<input type="radio" name="playerWidth" id="playerWidthMedium" value="260" />&nbsp;&nbsp;<label for="playerWidthMedium">Small (260x252)</label>
 								</fieldset>
 								<fieldset class="kalturaNoBorderFieldSet">
 									<input type="radio" name="playerWidth" id="playerWidthCustom" value="" />&nbsp;&nbsp;<label for="playerCustomWidth">Custom width</label>

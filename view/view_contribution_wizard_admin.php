@@ -48,7 +48,7 @@
 	
 	function updateKShowCompleteHandler() {
 		// go to edit mode
-		var url = "<?php echo kalturaGenerateTabUrl(array("tab" => "kaltura_browse", "kaction" => "edit", "firstedit" => "true")); ?>&kshowid="+kshowId;
+		var url = "<?php echo kalturaGenerateTabUrl(array("tab" => "kaltura_browse", "kaction" => "sendtoeditor", "firstedit" => "true")); ?>&kshowid="+kshowId;
 		
 		topWindow.Kaltura.restoreModalSize(
 			function () {

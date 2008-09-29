@@ -89,6 +89,12 @@
 				if (!attribs['wid'])
 					attribs['wid'] = '';
 				
+				if (!attribs['addpermission'])
+					attribs['addpermission'] = '';
+				
+				if (!attribs['editpermission'])
+					attribs['editpermission'] = '';
+				
 				if (!attribs['size'])
 					attribs['size'] = 'custom';
 
@@ -130,7 +136,7 @@
 				contentData += 'src="' + (this._url + '/../thumbnails/placeholder.gif') + '" ';
 				contentData += 'title="Kaltura" ';
 				contentData += 'alt="Kaltura" ';
-				contentData += 'class="kaltura_item align' + attribs['align'] + '" '; 
+				contentData += 'class="kaltura_item align' + attribs['align'] + ' kaltura_add_' + attribs['addpermission'] + ' kaltura_edit_' + attribs['editpermission'] + '" '; 
 				contentData += 'name="mce_plugin_kaltura_desc" ';
 				contentData += 'width="' + attribs['width'] + '" ';
 				contentData += 'height="' + attribs['height'] + '" ';
@@ -192,20 +198,21 @@
 							case 'aligncenter':
 								attribs['align'] = 'center';
 								break;
-								/*
 							default:
 								classAttrArr = classAttribs[j].match(/kaltura_(\w*)_(\w*)/);
 								if (classAttrArr && classAttrArr.length == 3) {
 									switch(classAttrArr[1]) {
-										case 'width': //width
-											contentData += 'width="' + classAttrArr[2] + '" ';
+										case 'add': 
+											if (classAttrArr[2] != "")
+												contentData += 'addpermission="' + classAttrArr[2] + '" ';
 											break;
-										case 'height': //height
-											contentData += 'height="' + classAttrArr[2] + '" ';
+										case 'edit':
+											if (classAttrArr[2] != "")
+												contentData += 'editpermission="' + classAttrArr[2] + '" ';
 											break;
 									}
 								}
-								break;*/
+								break;
 						}
 					}
 					

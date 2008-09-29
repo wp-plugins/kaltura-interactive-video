@@ -5,11 +5,6 @@
 	require_once('lib/common.php');
 	require_once('lib/kaltura_helpers.php');  
   
-	if (!KalturaHelpers::userCanEdit())
-	{
-		wp_die(__('You do not have sufficient permissions to access this page.'));
-	}
-	
 	$kshowId = @$_GET['kshowid'];
 	
 	if (!$kshowId)

@@ -87,6 +87,8 @@
 				{
 					$width = $_POST["playerWidth"];
 					$type = $_POST["playerType"];
+					$addPermission = $_POST["addPermission"];
+					$editPermission = $_POST["editPermission"];
 					
 					// add widget
 					$player = KalturaHelpers::getPlayerByType($type);
@@ -102,6 +104,8 @@
 					$viewData["playerHeight"] = KalturaHelpers::calculatePlayerHeight($type, $width);
 					$viewData["playerType"] = $type;
 					$viewData["widgetId"] = $widgetId;
+					$viewData["addPermission"] = $addPermission;
+					$viewData["editPermission"] = $editPermission;
 					$redirectUrl = kalturaGenerateTabUrl(array("kaction" => "browse"));
 					require_once(dirname(__FILE__) . "/../view/view_send_to_editor.php");
 					require_once(dirname(__FILE__) . "/../view/view_js_for_tabs.php"); 

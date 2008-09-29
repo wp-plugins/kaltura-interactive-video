@@ -99,15 +99,18 @@ class KalturaHelpers
 		return kalturaGetServerUrl() . "/kcw/ui_conf_id/" . $uiConfId;
 	}
 
-	function userCanEdit() {
+	function userCanEdit($override = null) {
 		global $current_user;
 
 		$roles = array();
 		foreach($current_user->roles as $key => $val)
 			$roles[$val] = 1;
 			 
-		$permissionsEdit = @get_option('kaltura_permissions_edit');
-		
+		if ($override !== "0" && $override !== "1" && $override !== "2" && $override !== "3") 
+			$permissionsEdit = @get_option('kaltura_permissions_edit');
+		else
+			$permissionsEdit = $override;
+
 		// note - there are no breaks in the switch (code should jump to next case)
 		switch($permissionsEdit)
 		{
@@ -127,18 +130,22 @@ class KalturaHelpers
 				if (@$roles["administrator"])
 					return true;
 		}
+		
 		return false;
 	}
 
-	function userCanAdd() {
+	function userCanAdd($override = null) {
 		global $current_user;
 		
 		$roles = array();
 		foreach($current_user->roles as $key => $val)
 			$roles[$val] = 1;
+		
+		if ($override !== "0" && $override !== "1" && $override !== "2" && $override !== "3")
+			$permissionsAdd = @get_option('kaltura_permissions_add');
+		else
+			$permissionsAdd = $override;
 			
-		$permissionsAdd = @get_option('kaltura_permissions_add');
-	
 		// note - there are no breaks in the switch (code should jump to next case)
 		switch($permissionsAdd)
 		{
