@@ -20,11 +20,10 @@ KalturaModal = {
 		var jqModalbox = jQuery("<div>");
 		jqModalbox.attr("id", id);
 		jqModalbox.attr("class", "kalturaModal");
-		jqModalbox
-		.show()
-		.css("margin-top", "-"+(height/2)+"px")
-		.css("margin-left", "-"+(width/2)+"px")
-		.css("width", width+"px");
+		jqModalbox.css("display", "block");
+		jqModalbox.css("margin-top", "-"+(height/2)+"px");
+		jqModalbox.css("margin-left", "-"+(width/2)+"px");
+		jqModalbox.css("width", width+"px");
 		
 		// create content div inside objModalbox
 		var jqModalboxContent = jQuery("<div>");
