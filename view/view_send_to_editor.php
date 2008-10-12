@@ -60,11 +60,16 @@
 ?>
 
 <div class="kalturaTab">
+	<?php if (@$_GET["firstedit"] != "true"): ?>
+	<div class="backDiv">
+		<a href="<?php echo kalturaGenerateTabUrl(array()); ?>"><img src="<?php echo kalturaGetPluginUrl(); ?>/images/back.gif" alt="Back"/></a>
+	</div>
+	<?php endif; ?>
 	<form method="post" class="kalturaForm">
 		<table id="kalturaEditTable" class="form-table kalturaFormTable">
 			<tr>
 				<td valign="top" width="180">
-					<div id="divKalturaThumbnail" style="width:250px;height:244px;" class="kalturaHand" onclick="Kaltura.activatePlayer('divKalturaThumbnail','divKalturaPlayer');">
+					<div id="divKalturaThumbnail" style="width:250px; height:244px;" class="kalturaHand" onclick="Kaltura.activatePlayer('divKalturaThumbnail','divKalturaPlayer');">
 						<div class="playerName"><nobr><?php echo @$kshow["name"]; ?></nobr></div>
 						<img id="thumbnailPreview" src=""  />
 					</div>
@@ -96,16 +101,17 @@
 					</script>
 				</td>
 				<td id="kalturaEditRight" valign="top">
-					<?php if (@$_GET["firstedit"] != "true"): ?>
-					<div class="backDiv">
-						<a href="<?php echo kalturaGenerateTabUrl(array()); ?>"><img src="<?php echo kalturaGetPluginUrl(); ?>/images/back.gif" alt="Back"/></a>
-					</div>
-					<?php endif; ?>
 					<table>
 						<tr>
+							<td style="padding-bottom:22px;" colspan="2">
+								<label for="ktitle">Title:</label>
+								<input type="text" name="ktitle" id="ktitle" size="32" value="<?php echo @$kshow["name"]; ?>" style="margin-left:6px;" />
+							</td>
+						</tr>
+						<tr>
 							<td valign="top">
-								<fieldset class="kalturaNoBorderFieldSet">
-									<legend><label for="playerType">Select player design:</label></legend>
+								<div class="selectBox">
+									<label for="playerType">Select player design:</label>
 									<select name="playerType" id="playerType" onchange="embedPreviewPlayer(this.options[this.selectedIndex].value);">
 									<?php $players = KalturaHelpers::getPlayers(); ?>
 									<?php foreach($players as $name => $details): ?>
@@ -120,46 +126,44 @@
 										embedPreviewPlayer('<?php echo $selectedPlayerName; ?>');
 									</script>
 									<?php endif; ?>
-								</fieldset>	
-								<fieldset class="kalturaNoBorderFieldSet">
-									<legend><label for="addPermission">Who can add to video:</label></legend>
+								</div>	
+								<div class="selectBox">
+									<label for="addPermission">Who can add to video:</label>
 									<select name="addPermission" id="addPermission">
 										<option value="3" <?php echo @get_option("kaltura_permissions_add") == "3" ? "selected=\"selected\"" : ""; ?>>Blog Administrators</option>
 										<option value="2" <?php echo @get_option("kaltura_permissions_add") == "2" ? "selected=\"selected\"" : ""; ?>>Blog Editors/Contributors & Authors</option>
 										<option value="1" <?php echo @get_option("kaltura_permissions_add") == "1" ? "selected=\"selected\"" : ""; ?>>Blog Subscribers</option>										
 										<option value="0" <?php echo @get_option("kaltura_permissions_add") == "0" ? "selected=\"selected\"" : ""; ?>>Everybody</option>
 									</select>
-								</fieldset>
-								<fieldset class="kalturaNoBorderFieldSet">	
-									<legend><label for="editPermission">Who can edit to video:</label></legend>
+								</div>
+								<div class="selectBox">
+									<label for="editPermission">Who can edit to video:</label>
 									<select name="editPermission" id="editPermission">
 										<option value="3" <?php echo @get_option("kaltura_permissions_edit") == "3" ? "selected=\"selected\"" : ""; ?>>Blog Administrators</option>
 										<option value="2" <?php echo @get_option("kaltura_permissions_edit") == "2" ? "selected=\"selected\"" : ""; ?>>Blog Editors/Contributors & Authors</option>
 										<option value="1" <?php echo @get_option("kaltura_permissions_edit") == "1" ? "selected=\"selected\"" : ""; ?>>Blog Subscribers</option>										
 										<option value="0" <?php echo @get_option("kaltura_permissions_edit") == "0" ? "selected=\"selected\"" : ""; ?>>Everybody</option>
 									</select>
-								</fieldset>
+								</div>
 							</td>
-							<td valign="top">
-								<fieldset class="kalturaNoBorderFieldSet">
-									<legend><label for="kshowName">Select player size:</label></legend>
-								</fieldset>
-								<fieldset class="kalturaNoBorderFieldSet">
-									<input type="radio" name="playerWidth" id="playerWidthLarge" value="410" checked="checked" />&nbsp;&nbsp;<label for="playerWidthLarge">Large (410x364)</label><br />
-								</fieldset>
-								<fieldset class="kalturaNoBorderFieldSet">
-									<input type="radio" name="playerWidth" id="playerWidthMedium" value="260" />&nbsp;&nbsp;<label for="playerWidthMedium">Small (260x252)</label>
-								</fieldset>
-								<fieldset class="kalturaNoBorderFieldSet">
-									<input type="radio" name="playerWidth" id="playerWidthCustom" value="" />&nbsp;&nbsp;<label for="playerCustomWidth">Custom width</label>
+							<td valign="top" style="padding-left:25px;">
+								<strong>Select player size:</strong>
+								<div class="radioBox">
+									<input type="radio" class="iradio" name="playerWidth" id="playerWidthLarge" value="410" checked="checked" /><label for="playerWidthLarge">Large (410x364)</label><br />
+								</div>
+								<div class="radioBox">
+									<input type="radio" class="iradio" name="playerWidth" id="playerWidthMedium" value="260" /><label for="playerWidthMedium">Small (260x252)</label>
+								</div>
+								<div class="radioBox">
+									<input type="radio" class="iradio" name="playerWidth" id="playerWidthCustom" value="" /><label for="playerCustomWidth">Custom width</label>
 									<input type="text" name="playerCustomWidth" id="playerCustomWidth" maxlength="3" size="3" />
-								</fieldset>
-								<p id="kalturaEditButtons" class="submit">
-									<input type="submit" value="<?php echo attribute_escape( __( 'Insert into Post' ) ); ?>" name="sendToEditorButton" class="button-secondary" />
-								</p>
+								</div>
 							</td>
 						</tr>
 					</table>
+					<p id="kalturaEditButtons" class="submit">
+						<input type="submit" value="<?php echo attribute_escape( __( 'Insert into Post' ) ); ?>" name="sendToEditorButton" class="button-secondary" />
+					</p>
 				</td>
 			</tr>
 		</table>

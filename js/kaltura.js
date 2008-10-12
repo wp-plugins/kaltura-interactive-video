@@ -20,10 +20,11 @@ KalturaModal = {
 		var jqModalbox = jQuery("<div>");
 		jqModalbox.attr("id", id);
 		jqModalbox.attr("class", "kalturaModal");
-		jqModalbox.css("display", "block");
-		jqModalbox.css("margin-top", "-"+(height/2)+"px");
-		jqModalbox.css("margin-left", "-"+(width/2)+"px");
-		jqModalbox.css("width", width+"px");
+		jqModalbox
+		.show()
+		.css("margin-top", "-"+(height/2)+"px")
+		.css("margin-left", "-"+(width/2)+"px")
+		.css("width", width+"px");
 		
 		// create content div inside objModalbox
 		var jqModalboxContent = jQuery("<div>");
@@ -75,7 +76,7 @@ Kaltura = {
 		        	marginTop: "-" + ((height + 27) / 2) + "px",
 		        	marginLeft: "-" + (width / 2) + "px"
 		      	}, 
-		      	1000 
+		      	600 
 			);
 			
 			jQuery("#TB_iframeContent").animate(
@@ -83,7 +84,7 @@ Kaltura = {
 					width: width + "px",
 					height: height + "px"
 				},
-				1000,
+				600,
 				null,
 				callback
 			);
@@ -291,5 +292,4 @@ Kaltura = {
 		
 		return false;
 	}
-	
 }

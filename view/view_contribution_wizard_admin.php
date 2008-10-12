@@ -6,15 +6,6 @@
 	{
 		if (obj && obj.length > 0 && obj[0].kshowId)
 			kshowId = obj[0].kshowId;
-			
-		jQuery.ajax(
-			{
-				url: "<?php echo kalturaGetPluginUrl(); ?>/ajax_update_kshow_name.php",
-				dataType: "html",
-				method: "GET",
-				data: { kshowId: kshowId }
-			}
-		);
 	}
 	
 	function onContributionWizardClose(modified)
@@ -28,14 +19,12 @@
 		
 		if (modified && kshowId)
 		{
-			jQuery.ajax(
-				{
-					url: "<?php echo kalturaGetPluginUrl(); ?>/ajax_update_kshow_name.php",
-					success: updateKShowCompleteHandler,
-					error: updateKShowCompleteHandler,
-					dataType: "html",
-					method: "GET",
-					data: { kshowId: kshowId }
+			// go to edit mode
+			var url = "<?php echo kalturaGenerateTabUrl(array("tab" => "kaltura_browse", "kaction" => "sendtoeditor", "firstedit" => "true")); ?>&kshowid="+kshowId;
+			
+			topWindow.Kaltura.restoreModalSize(
+				function () {
+					window.location.href = url
 				}
 			);
 		}
@@ -44,17 +33,6 @@
 			// timeout needed because we are removing an iframe that is the current caller (this iframe) 
 			setTimeout("topWindow.tb_remove()", 0);
 		}
-	}
-	
-	function updateKShowCompleteHandler() {
-		// go to edit mode
-		var url = "<?php echo kalturaGenerateTabUrl(array("tab" => "kaltura_browse", "kaction" => "sendtoeditor", "firstedit" => "true")); ?>&kshowid="+kshowId;
-		
-		topWindow.Kaltura.restoreModalSize(
-			function () {
-				window.location.href = url
-			}
-		);
 	}
 	
 	// fix mac firefox opacity bug

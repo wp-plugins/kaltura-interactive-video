@@ -24,46 +24,14 @@
 		$viewData["isLibrary"] = $isLibrary;
 		switch($action)
 		{
-			case "edit":
-				$kshowId = @$_GET['kshowid'];
-				if (!@$_POST["update"])
-				{
-					$kalturaClient = getKalturaClient();
-					$kshow = KalturaModel::getKshow($kalturaClient, $kshowId);
-					$flashVars = KalturaHelpers::getTinyPlayerFlashVars($kalturaClient->getKs(), $kshowId);
-					$entryId  = @$kshow["showEntry"]["id"];
-					$thumbnail = kalturaGetPluginUrl() . "/thumbnails/get_preview_thumbnail.php?thumbnail_url=" . @$kshow["showEntry"]["thumbnailUrl"] . "&player_type=" . get_option('kaltura_default_player_type');
-					$viewData["kshow"] = $kshow;
-					$viewData["entryId"] = $entryId;
-					$viewData["flashVars"] = $flashVars;
-					$viewData["flashVars"]["autoPlay"] = "true";
-					$viewData["swfUrl"] = KalturaHelpers::getSwfUrlForBaseWidget(get_option('kaltura_default_player_type'));
-					$viewData["thumbnailPlaceHolderUrl"] = $thumbnail;
-					require_once(dirname(__FILE__) . "/../view/view_edit.php");
-					require_once(dirname(__FILE__) . "/../view/view_js_for_tabs.php");
-				}
-				else
-				{
-					$kshowUpdate = new KalturaKShow();
-					$kshowUpdate->name = $_POST["kshowName"];
-					$kshowUpdate->description = $_POST["kshowDescription"];
-					$kalturaClient = getKalturaClient(false, "edit:".$kshowId);
-					KalturaModel::updateKshow($kalturaClient, $kshowId, $kshowUpdate);
-					
-					if (@$_GET["firstedit"] == "true")
-						$redirectUrl = kalturaGenerateTabUrl(array("kaction" => "sendtoeditor", "kshowid" => $kshowId, "firstedit" => "true"));
-					else
-						$redirectUrl = kalturaGenerateTabUrl(array("kaction" => "browse"));
-					$viewData["jsCode"] = "window.location.href = '" . $redirectUrl . "';";
-					require_once(dirname(__FILE__) . "/../view/view_js_for_tabs.php");
-				}
-				break;
 			case "delete":
 				$kshowId = @$_GET['kshowid'];
 				$kalturaAdminClient = getKalturaClient(true);
 				$res = KalturaModel::deleteKShow($kalturaAdminClient, $kshowId);
 				$redirectUrl = kalturaGenerateTabUrl(null);
 				$viewData["jsCode"] = "window.location.href = '" . $redirectUrl . "';";
+				$viewData["redirectUrl"] = $redirectUrl;
+				require_once(dirname(__FILE__) . "/../view/view_deleted.php");
 				require_once(dirname(__FILE__) . "/../view/view_js_for_tabs.php");
 				break;
 			case "sendtoeditor":
@@ -85,6 +53,13 @@
 				}
 				else 
 				{
+					$kalturaClient = getKalturaClient(false, "edit:".$kshowId);
+					
+					// update the kshow name
+					$kshowUpdate = new KalturaKShow();
+					$kshowUpdate->name = $_POST["ktitle"];
+					KalturaModel::updateKshow($kalturaClient, $kshowId, $kshowUpdate);
+	
 					$width = $_POST["playerWidth"];
 					$type = $_POST["playerType"];
 					$addPermission = $_POST["addPermission"];
@@ -93,7 +68,6 @@
 					// add widget
 					$player = KalturaHelpers::getPlayerByType($type);
 					$sessionUser = kalturaGetSessionUser();
-					$kalturaClient = getKalturaClient();
 					$widget = new KalturaWidget();
 					$widget->kshowId = $kshowId;
 					$widget->uiConfId = $player["uiConfId"];

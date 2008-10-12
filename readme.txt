@@ -3,14 +3,14 @@ Contributors: Kaltura
 Donate link: http://community.kaltura.org/
 Tags: video,video comments,player,editor,rich-media,ria,interactive,collaboration,remix,mixing,mix,media,audio,video blog,video responses,video editor,vlog,podcast,kaltura,comments,Post,Posts,Images,Admin,Plugin,photo,picture,richmedia cms,media library,media,edit,participate,webcam,camera,record,YouTube,MySpace,Flickr,Facebook,CCMixter,Jamendo,New York Public Library,
 Requires at least: 2.5
-Tested up to: 2.6.1
+Tested up to: 2.6.2
 Stable tag: 1.1
 
 Easily add full interactive video capabilities to your blog.
 
 == Description ==
 
-Add interactive video capabilities to your blog!  This is not just another video embed tool - the plugin enables you to enhance your blog with both basic and advanced video capabilities.  Upload/ record/import videos directly to your post, edit and remix video content, enable video responses, manage and track your video content and much more...
+Add interactive video capabilities to your blog! This is not just another video embed tool – it includes the ability to upload/ record/import videos directly to your post, edit and remix content with an online video editor, enable video responses, manage and track your video content and much more...
 
 Highlights:
 
@@ -20,15 +20,13 @@ Highlights:
 * Allow readers and subscribers to add video and audio comments, and to participate in collaborative videos; 
 * Manage and track interactive videos through the management console; 
 * Complete administrative capabilities. You decide who can add and edit videos; 
-* Integration to the post wyswyg editor; 
-* Easy installation that takes just 4 steps and a few minutes. 
-
-Version 1.1 includes many enhancements and fixes including:  
-
-* Three different player styles to choose from 
+* Supports more than 150 video, audio and image file formats and codecs 
+* Three different video player styles to choose from 
 * Custom sizing of the video player 
 * Advanced sharing options for videos 
-* New TinyMCE integration (Interactive Video is edited like any other image, resize/caption/margin/align) 
+* Easy installation that takes just 4 steps and a few minutes. 
+
+With Version 1.15 we've added quite a few fixes and enhancements, including the ability to set permissions per player.  Based on several requests that we received, now you can choose who can add to and edit each specific video player that you post.
 
 Showcase your blog, see examples and pictures of the plugin and get support in our forum: http://community.kaltura.org/viewforum.php?f=4 
 
