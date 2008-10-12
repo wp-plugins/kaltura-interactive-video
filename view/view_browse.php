@@ -44,7 +44,7 @@
 				</div>
 				<div class="submit">	
 					<?php if (!$viewData["isLibrary"]): ?>
-						<input type="button" title="Inset into post" class="add" onclick="window.location = '<?php echo $sendToEditorUrl; ?>';" />
+						<input type="button" title="Insert into post" class="add" onclick="window.location = '<?php echo $sendToEditorUrl; ?>';" />
 					<?php endif; ?>
 					<?php if ($viewData["isLibrary"]): ?>
 						<input type="button" title="Edit video" class="edit_video" onclick="KalturaModal.openModal('simple_editor', '<?php echo kalturaGetPluginUrl() ?>/page_simple_editor_library.php?kshowid=<?php echo $kshow["id"]; ?>', { width: 890, height: 546 } ); jQuery('#simple_editor').addClass('modalSimpleEditor');" />

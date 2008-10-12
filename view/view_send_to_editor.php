@@ -106,6 +106,7 @@
 							<td style="padding-bottom:22px;" colspan="2">
 								<label for="ktitle">Title:</label>
 								<input type="text" name="ktitle" id="ktitle" size="32" value="<?php echo @$kshow["name"]; ?>" style="margin-left:6px;" />
+								<span style="color:red; font-size: 20px; font-weight: bold; display: none; line-height: 20px">*</span>
 							</td>
 						</tr>
 						<tr>
@@ -137,7 +138,7 @@
 									</select>
 								</div>
 								<div class="selectBox">
-									<label for="editPermission">Who can edit to video:</label>
+									<label for="editPermission">Who can edit the video:</label>
 									<select name="editPermission" id="editPermission">
 										<option value="3" <?php echo @get_option("kaltura_permissions_edit") == "3" ? "selected=\"selected\"" : ""; ?>>Blog Administrators</option>
 										<option value="2" <?php echo @get_option("kaltura_permissions_edit") == "2" ? "selected=\"selected\"" : ""; ?>>Blog Editors/Contributors & Authors</option>
@@ -175,6 +176,11 @@
 	});
 	
 	jQuery("#kalturaEditButtons input[type=submit]").click(function () {
+			jQuery("#ktitle").css("border-color", "").siblings("span").hide();
+			if (jQuery("#ktitle").val().replace(/ /g, "").length == 0) {
+				jQuery("#ktitle").css("border-color", "red").siblings("span").show();
+				return false;
+			}
 			jQuery("#playerWidthCustom").val(jQuery("#playerCustomWidth").val());
 			if (jQuery("#playerWidthCustom").attr("checked")) 
 			{
