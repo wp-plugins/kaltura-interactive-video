@@ -76,5 +76,7 @@
 </div>
 
 <script type="text/javascript">
-	jQuery('#kalturaBrowse div.submit input').tTips();
+	jQuery(function () {
+		jQuery('#kalturaBrowse div.submit input').tTips();
+	});
 </script>
