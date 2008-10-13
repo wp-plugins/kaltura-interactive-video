@@ -4,7 +4,7 @@ Donate link: http://community.kaltura.org/
 Tags: video,video comments,player,editor,rich-media,ria,interactive,collaboration,remix,mixing,mix,media,audio,video blog,video responses,video editor,vlog,podcast,kaltura,comments,Post,Posts,Images,Admin,Plugin,photo,picture,richmedia cms,media library,media,edit,participate,webcam,camera,record,YouTube,MySpace,Flickr,Facebook,CCMixter,Jamendo,New York Public Library,
 Requires at least: 2.5
 Tested up to: 2.6.2
-Stable tag: 1.1
+Stable tag: 1.15
 
 Easily add full interactive video capabilities to your blog.
 
