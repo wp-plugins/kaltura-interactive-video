@@ -1,3 +1,9 @@
+Version 1.15
+-------------
+* Added permissions per player
+* Changed browse videos layout
+* Changed add video flow
+
 Version 1.1
 -------------
 * Three different player styles to choose from
