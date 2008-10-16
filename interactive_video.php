@@ -13,21 +13,17 @@ require_once('lib/kaltura_client.php');
 require_once('lib/kaltura_helpers.php');
 require_once('lib/common.php');
  
-// content filter
-
-if (KalturaHelpers::compareWPVersion("2.5", "="))
-{
+// comments filter
+if (KalturaHelpers::compareWPVersion("2.5", "=")) 
 	// in wp 2.5 there was a bug in wptexturize which corrupted our tag with unicode html entities
 	// thats why we run our filter before (using lower priority)
-	add_filter('the_content', 'kaltura_the_content', -1); 
 	add_filter('comment_text', 'kaltura_the_comment', -1);
-}
 else
-{
 	// in wp 2.5.1 and higher we can use the default priority
-	add_filter('the_content', 'kaltura_the_content'); 
 	add_filter('comment_text', 'kaltura_the_comment');
-}
+
+// tag shortcode
+add_shortcode('kaltura-widget', 'kaltura_shortcode');
 
 if (KalturaHelpers::videoCommentsEnabled()) {
 	add_action('comment_form', 'kaltura_comment_form');
@@ -39,6 +35,9 @@ add_action('wp_print_scripts', 'kaltura_register_js'); // register js files
 
 // css
 add_action('wp_head', 'kaltura_head'); // print css
+
+// footer
+add_action('wp_footer', 'kaltura_footer');
 
 // admin css
 add_filter('admin_head', 'kaltura_add_admin_css'); // print admin css
@@ -100,7 +99,17 @@ function kaltura_the_content($content) {
 }
 
 function kaltura_the_comment($content) {
-	return _kaltura_replace_tags($content, true);
+	global $shortcode_tags;
+	// we only what to run our shortcode and not all
+	$shortcode_tags_backup = $shortcode_tags;
+	
+	add_shortcode('kaltura-widget', 'kaltura_shortcode');
+	$content = do_shortcode($content);
+	
+	// restore the original array
+	$shortcode_tags = $shortcode_tags_backup;
+	
+	return $content;
 }
 
 function kaltura_print_js($content) {
@@ -122,6 +131,24 @@ function kaltura_register_js() {
 function kaltura_head() {
 	$plugin_url = kalturaGetPluginUrl();
 	echo('<link rel="stylesheet" href="' . $plugin_url . '/css/kaltura.css?v'.kaltura_get_version().'" type="text/css" />');
+}
+
+function kaltura_footer() {
+	$plugin_url = kalturaGetPluginUrl();
+	echo ' 
+	<script type="text/javascript">
+		function handleGotoContribWizard (kshowId, pd_extraData) {
+			KalturaModal.openModal("contribution_wizard", "' . $plugin_url . '/page_contribution_wizard_front_end.php?kshowid=" + kshowId, { width: 680, height: 360 } );
+			jQuery("#contribution_wizard").addClass("modalContributionWizard");
+		}
+	
+		function handleGotoEditorWindow (kshowId, pd_extraData) {
+			KalturaModal.openModal("simple_editor", "' . $plugin_url . '/page_simple_editor_front_end.php?kshowid=" + kshowId, { width: 890, height: 546 } );
+			jQuery("#simple_editor").addClass("modalSimpleEditor");
+		}
+	</script>
+	
+	';
 }
 
 function kaltura_add_admin_css($content) {
@@ -244,117 +271,73 @@ function kaltura_comment_form($post_id) {
 	}
 }
 
-function _kaltura_replace_tags($content, $isComment) {
-	$length = strlen($content);
+function kaltura_shortcode($attrs) {
+	if (is_feed())
+		return "";
+		
+	// get the embed options from the attributes
+	$embedOptions = _kaltura_get_embed_options($attrs);
+
+	$isComment		= (@$attrs["size"] == "comments") ? true : false;
+	$wid 			= $embedOptions["wid"];
+	$width 			= $embedOptions["width"];
+	$height 		= $embedOptions["height"];
+	$divId 			= "kaltura_wrapper_" . $wid;
+	$thumbnailDivId = "kaltura_thumbnail_" . $wid;
+	$playerId 		= "kaltura_player_" . $wid;
+	$link = '<a href="http://corp.kaltura.com/">free video player & video platform - interactive video, online video solution: video player, video editor - kaltura</a><br /><a href="http://corp.kaltura.com/download">wordpress video - wordpress plugin for integrated video on video blogs, and  video tools</a>';
 	
-	$tagStartPos = 0;
-	$found = false;
+	if ($isComment)
+	{
+		$thumbnailPlaceHolderUrl = KalturaHelpers::getCommentPlaceholderThumbnailUrl($wid);
 
-	while(($tagStartPos = strpos($content, "[kaltura-widget", $tagStartPos)) !== false) {
-		$found = true;
-		$tagEndPos = strpos($content, "/]", $tagStartPos); 
-		$kalturaTag = substr($content, $tagStartPos, $tagEndPos - $tagStartPos + 2);
-		
-		// parse the parameters from the tag using the build in wp shortcode support
-		$params = shortcode_parse_atts($kalturaTag); 
-
-		// get the embed options from the params
-		$embedOptions = _kaltura_get_embed_options($params, $isComment);
-		
-		if (!is_feed()) { 
-			$wid 			= $embedOptions["wid"];
-			$width 			= $embedOptions["width"];
-			$height 		= $embedOptions["height"];
-			$divId 			= "kaltura_wrapper_" . $wid;
-			$thumbnailDivId = "kaltura_thumbnail_" . $wid;
-			$playerId 		= "kaltura_player_" . $wid;
-			$link = '<a href="http://corp.kaltura.com/">free video player & video platform - interactive video, online video solution: video player, video editor - kaltura</a><br /><a href="http://corp.kaltura.com/download">wordpress video - wordpress plugin for integrated video on video blogs, and  video tools</a>';
-			
-			if ($isComment)
-			{
-				$thumbnailPlaceHolderUrl = KalturaHelpers::getCommentPlaceholderThumbnailUrl($wid);
-
-				$embedOptions["flashVars"] .= "&autoPlay=true";
-				$html = '
-						<div id="' . $thumbnailDivId . '" style="width:'.$width.'px;height:'.$height.'px;" class="kalturaHand" onclick="Kaltura.activatePlayer(\''.$thumbnailDivId.'\',\''.$divId.'\');">
-							<img src="' . $thumbnailPlaceHolderUrl . '" style="" />
-						</div>
-						<div id="' . $divId . '" style="height: '.$height.'px"">'.$link.'</div>
-						<script type="text/javascript">
-							jQuery("#'.$divId.'").hide();
-							var kaltura_swf = new SWFObject("' . $embedOptions["swfUrl"] . '", "' . $playerId . '", "' . $width . '", "' . $height . '", "9", "#000000");
-							kaltura_swf.addParam("wmode", "opaque");
-							kaltura_swf.addParam("flashVars", "' . $embedOptions["flashVars"] . '");
-							kaltura_swf.addParam("allowScriptAccess", "always");
-							kaltura_swf.addParam("allowFullScreen", "true");
-							kaltura_swf.addParam("allowNetworking", "all");
-							kaltura_swf.write("' . $divId . '");
-						</script>
-				';
-			}
-			else
-			{
-				$divId = "kaltura_wrapper_" . $embedOptions["wid"];
-				$playerId = "kaltura_player_" . $embedOptions["wid"];
-				$style = '';
-				$style .= 'width:' . $embedOptions["width"] .'px;';
-				$style .= 'height:' . $embedOptions["height"] . 'px;';
-				if (@$embedOptions["align"])
-					$style .= 'float:' . $embedOptions["align"] . ';';
-					
-				// append the manual style properties
-				if (@$embedOptions["style"])
-					$style .= $embedOptions["style"];
-					
-				$html = '
-						<span id="'.$divId.'" style="'.$style.'">'.$link.'</span>
-						<script type="text/javascript">
-							var kaltura_swf = new SWFObject("' . $embedOptions["swfUrl"] . '", "' . $playerId . '", "' . $embedOptions["width"] . '", "' . $embedOptions["height"] . '", "9", "#000000");
-							kaltura_swf.addParam("wmode", "opaque");
-							kaltura_swf.addParam("flashVars", "' . $embedOptions["flashVars"] . '");
-							kaltura_swf.addParam("allowScriptAccess", "always");
-							kaltura_swf.addParam("allowFullScreen", "true");
-							kaltura_swf.addParam("allowNetworking", "all");
-							kaltura_swf.write("' . $divId . '");
-						</script>
-				';
-			}
-		}
-		
-		// remove new line so wordpress core filters won't try to replace new lines with <br />'s or <p>'s
-		$html = str_replace(array("\r\n", "\r", "\n", "\n\r"), "", $html);
-		
-		// split the html into 2 part (before the tag, and after the tag)
-		$content_part_1 = substr($content, 0, $tagStartPos);
-		$content_part_2 = substr($content, $tagEndPos + 2);
-		
-		// rebuild the html with our new code tag 
-		$content = $content_part_1 . $html . $content_part_2; 
-
-		$tagStartPos++;
+		$embedOptions["flashVars"] .= "&autoPlay=true";
+		$html = '
+				<div id="' . $thumbnailDivId . '" style="width:'.$width.'px;height:'.$height.'px;" class="kalturaHand" onclick="Kaltura.activatePlayer(\''.$thumbnailDivId.'\',\''.$divId.'\');">
+					<img src="' . $thumbnailPlaceHolderUrl . '" style="" />
+				</div>
+				<div id="' . $divId . '" style="height: '.$height.'px"">'.$link.'</div>
+				<script type="text/javascript">
+					jQuery("#'.$divId.'").hide();
+					var kaltura_swf = new SWFObject("' . $embedOptions["swfUrl"] . '", "' . $playerId . '", "' . $width . '", "' . $height . '", "9", "#000000");
+					kaltura_swf.addParam("wmode", "opaque");
+					kaltura_swf.addParam("flashVars", "' . $embedOptions["flashVars"] . '");
+					kaltura_swf.addParam("allowScriptAccess", "always");
+					kaltura_swf.addParam("allowFullScreen", "true");
+					kaltura_swf.addParam("allowNetworking", "all");
+					kaltura_swf.write("' . $divId . '");
+				</script>
+		';
 	}
-	
-	if ($found && !is_feed()) {
-		$plugin_url = kalturaGetPluginUrl();
-		$js = '
-			<script type="text/javascript">
-				function handleGotoContribWizard (kshowId, pd_extraData) {
-					KalturaModal.openModal("contribution_wizard", "' . $plugin_url . '/page_contribution_wizard_front_end.php?kshowid=" + kshowId, { width: 680, height: 360 } );
-					jQuery("#contribution_wizard").addClass("modalContributionWizard");
-				}
+	else
+	{
+		$divId = "kaltura_wrapper_" . $embedOptions["wid"];
+		$playerId = "kaltura_player_" . $embedOptions["wid"];
+		$style = '';
+		$style .= 'width:' . $embedOptions["width"] .'px;';
+		$style .= 'height:' . $embedOptions["height"] . 'px;';
+		if (@$embedOptions["align"])
+			$style .= 'float:' . $embedOptions["align"] . ';';
 			
-				function handleGotoEditorWindow (kshowId, pd_extraData) {
-					KalturaModal.openModal("simple_editor", "' . $plugin_url . '/page_simple_editor_front_end.php?kshowid=" + kshowId, { width: 890, height: 546 } );
-					jQuery("#simple_editor").addClass("modalSimpleEditor");
-				}
-			</script>';
-		// remove new line so wordpress core filters won't try to replace new lines with <br />'s or <p>'s
-		$js = str_replace(array("\r\n", "\r", "\n", "\n\r"), "", $js);
-
-		$content .= $js;
+		// append the manual style properties
+		if (@$embedOptions["style"])
+			$style .= $embedOptions["style"];
+			
+		$html = '
+				<span id="'.$divId.'" style="'.$style.'">'.$link.'</span>
+				<script type="text/javascript">
+					var kaltura_swf = new SWFObject("' . $embedOptions["swfUrl"] . '", "' . $playerId . '", "' . $embedOptions["width"] . '", "' . $embedOptions["height"] . '", "9", "#000000");
+					kaltura_swf.addParam("wmode", "opaque");
+					kaltura_swf.addParam("flashVars", "' . $embedOptions["flashVars"] . '");
+					kaltura_swf.addParam("allowScriptAccess", "always");
+					kaltura_swf.addParam("allowFullScreen", "true");
+					kaltura_swf.addParam("allowNetworking", "all");
+					kaltura_swf.write("' . $divId . '");
+				</script>
+		';
 	}
-
-	return $content;
+		
+	return $html;
 }
 
 function kaltura_get_version() {
@@ -367,9 +350,8 @@ function kaltura_get_version() {
 	return $version;
 }
 
-function _kaltura_get_embed_options($params, $isComment) {
-
-	if ($isComment) // comments player
+function _kaltura_get_embed_options($params) {
+	if (@$params["size"] == "comments") // comments player
 	{
 		if (get_option('kaltura_comments_player_type'))
 			$type = get_option('kaltura_comments_player_type');
@@ -398,7 +380,7 @@ function _kaltura_get_embed_options($params, $isComment) {
 		// if width is missing set some default
 		if (!@$params["width"]) 
 			$params["width"] = 410;
-			
+
 		// if height is missing, recalculate it
 		if (!@$params["height"])
 			$params["height"] = KalturaHelpers::calculatePlayerHeight(get_option('kaltura_default_player_type'), $params["width"]);
