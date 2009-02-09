@@ -10,7 +10,7 @@ Easily add full interactive video capabilities to your blog.
 
 == Description ==
 
-Add interactive video capabilities to your blog! This is not just another video embed tool – it includes the ability to upload/ record/import videos directly to your post, edit and remix content with an online video editor, enable video responses, manage and track your video content and much more...
+Add interactive video capabilities to your blog! This is not just another video embed tool - it includes the ability to upload/ record/import videos directly to your post, edit and remix content with an online video editor, enable video responses, manage and track your video content and much more... And Kaltura covers all hosting and streaming costs for FREE up to 10GB.
 
 Highlights:
 
