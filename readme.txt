@@ -1,7 +1,7 @@
 === Interactive Video Plugin ===
 Contributors: Kaltura
 Donate link: http://community.kaltura.org/
-Tags: video,video comments,player,editor,rich-media,ria,interactive,collaboration,remix,mixing,mix,media,audio,video blog,video responses,video editor,vlog,podcast,kaltura,comments,Post,Posts,Images,Admin,Plugin,photo,picture,richmedia cms,media library,media,edit,participate,webcam,camera,record,YouTube,MySpace,Flickr,Facebook,CCMixter,Jamendo,New York Public Library,
+Tags: video,video comments,player,editor,rich-media,ria,interactive,collaboration,remix,mixing,mix,media,audio,video blog,video responses,video editor,vlog,podcast,kaltura,comments,Post,Posts,Images,Admin,Plugin,photo,picture,richmedia cms,media library,media,edit,participate,webcam,camera,record,MySpace,Flickr,Facebook,CCMixter,Jamendo,New York Public Library,
 Requires at least: 2.5
 Tested up to: 2.6.2
 Stable tag: 1.15
@@ -16,7 +16,7 @@ Highlights:
 
 * Upload, record from webcam and import all rich-media directly to your blog post; 
 * Edit and remix videos using Kaltura's online full-featured video editor; 
-* Easily import all rich media (video, audio, pictures...) from other sites and social networks, such as YouTube, MySpace, Flickr, CCMixter, Jamendo, New York Public Library etc. and; 
+* Easily import all rich media (video, audio, pictures...) from other sites and social networks, such as MySpace, Flickr, CCMixter, Jamendo, New York Public Library etc. and; 
 * Allow readers and subscribers to add video and audio comments, and to participate in collaborative videos; 
 * Manage and track interactive videos through the management console; 
 * Complete administrative capabilities. You decide who can add and edit videos; 
