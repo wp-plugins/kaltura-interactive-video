@@ -18,6 +18,7 @@
 			$partner->url1 = $webSiteUrl;
 			$partner->adminEmail = $adminEmail;
 			$partner->description = "Wordpress plugin";
+			$partner->type = "101";
 	
 			$sessionUser = kalturaGetSessionUser();
 			$config = kalturaGetServiceConfiguration();
