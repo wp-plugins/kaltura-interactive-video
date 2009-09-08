@@ -184,6 +184,7 @@ class KalturaPartner
 	public $adminEmail;
 	public $description;
 	public $commercialUse;
+	public $type;
 }
 
 class KalturaClient extends KalturaClientBase
@@ -689,6 +690,7 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "partner_adminEmail", $partner->adminEmail);
 		$this->addOptionalParam($params, "partner_description", $partner->description);
 		$this->addOptionalParam($params, "partner_commercialUse", $partner->commercialUse);
+		$this->addOptionalParam($params, "partner_type", $partner->type);
 		$this->addOptionalParam($params, "cms_password", $cmsPassword);
 
 		$result = $this->hit("registerpartner", $kalturaSessionUser, $params);
