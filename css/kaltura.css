@@ -7,6 +7,9 @@ html, body{ height:100%; }
 .kalturaPager{ text-align: center; }
 input#kaltura_video_comment{ margin-top: 0; }
 
+.poweredByKaltura { font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif; font-size: 9px; height: 12px; text-align: right; overflow: hidden; line-height: 11px; }
+.poweredByKaltura div { padding-right: 5px; }
+
 /*-------------------------------- 
 	Admin
 ---------------------------------*/
