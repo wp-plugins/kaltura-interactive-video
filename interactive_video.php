@@ -268,7 +268,12 @@ function _kaltura_replace_tags($content, $isComment) {
 			$divId 			= "kaltura_wrapper_" . $wid;
 			$thumbnailDivId = "kaltura_thumbnail_" . $wid;
 			$playerId 		= "kaltura_player_" . $wid;
-			$link = '<a href="http://corp.kaltura.com/">free video player & video platform - interactive video, online video solution: video player, video editor - kaltura</a><br /><a href="http://corp.kaltura.com/download">wordpress video - wordpress plugin for integrated video on video blogs, and  video tools</a>';
+			$link = '';
+			$link .= '<a href="http://corp.kaltura.com/">open source video</a>, ';
+			$link .= '<a href="http://corp.kaltura.com/technology/technology">video platform</a>, ';
+			$link .= '<a href="http://corp.kaltura.com/technology/editing_and_annotation">open source video editor</a>';
+			
+			$powerdByBox ='<div class="poweredByKaltura" style="width: ' . $embedOptions["width"] . 'px; "><div><a href="http://corp.kaltura.com/technology/video_player" target="_blank">Video Player</a> by <a href="http://corp.kaltura.com/" target="_blank">Kaltura</a></div></div>';
 			
 			if ($isComment)
 			{
@@ -316,8 +321,10 @@ function _kaltura_replace_tags($content, $isComment) {
 							kaltura_swf.addParam("allowFullScreen", "true");
 							kaltura_swf.addParam("allowNetworking", "all");
 							kaltura_swf.write("' . $divId . '");
+							jQuery("#'.$divId.'").append("'.str_replace("\"", "\\\"", $powerdByBox).'"); 
 						</script>
 				';
+				//                                              ^ escape quotes for javascript ^
 			}
 		}
 		
