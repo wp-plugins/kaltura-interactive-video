@@ -1,20 +1,20 @@
 === Interactive Video Plugin ===
 Contributors: Kaltura
 Donate link: http://community.kaltura.org/
-
+Tags: 
 Requires at least: 2.5
 Tested up to: 2.6.2
 
 
 
 == Description ==
-Important notice - Kaltura will not be releasing any new versions of the Interactive Video Plugin, but don’t worry, you can download the new and improved Kaltura All in One Video Pack for WordPress - http://wordpress.org/extend/plugins/all-in-one-video-pack/
+Important notice - Kaltura will not be releasing any new versions of the Interactive Video Plugin, but don't worry, you can download the new and improved Kaltura All in One Video Pack for WordPress - http://wordpress.org/extend/plugins/all-in-one-video-pack/
 
 Migrating to the new plugin - it is VERY EASY to upgrade to the All in One Video Pack and still keep all of your existing content and video posts. 
 
 Here is what you need to do:
-- Download and install the “All in One Video Pack” plugin http://wordpress.org/extend/plugins/all-in-one-video-pack/
-- Deactivate the “Interactive Video” plugin (they cannot both be active at the same time)
+- Download and install the "All in One Video Pack" plugin http://wordpress.org/extend/plugins/all-in-one-video-pack/
+- Deactivate the "Interactive Video" plugin (they cannot both be active at the same time)
 - Activating the new plugin will automatically assign it to your Kaltura Partner ID (no additional signup required) and your content will be displayed in the wp-admin panel.
 
 
@@ -26,12 +26,12 @@ Should you have any questions or need any help, please check out our Forums http
 
 == Installation ==
 
-Important notice - Kaltura will not be releasing any new versions of the Interactive Video Plugin, but don’t worry, you can download the new and improved Kaltura All in One Video Pack for WordPress - http://wordpress.org/extend/plugins/all-in-one-video-pack/
+Important notice - Kaltura will not be releasing any new versions of the Interactive Video Plugin, but don't worry, you can download the new and improved Kaltura All in One Video Pack for WordPress - http://wordpress.org/extend/plugins/all-in-one-video-pack/
 
 Migrating to the new plugin - it is VERY EASY to upgrade to the All in One Video Pack and still keep all of your existing content and video posts. 
 Here is what you need to do:
-- Download and install the “All in One Video Pack” plugin http://wordpress.org/extend/plugins/all-in-one-video-pack/
-- Deactivate the “Interactive Video” plugin (they cannot both be active at the same time)
+- Download and install the "All in One Video Pack" plugin http://wordpress.org/extend/plugins/all-in-one-video-pack/
+- Deactivate the "Interactive Video" plugin (they cannot both be active at the same time)
 - Activating the new plugin will automatically assign it to your Kaltura Partner ID (no additional signup required) and your content will be displayed in the wp-admin panel.
 
 
